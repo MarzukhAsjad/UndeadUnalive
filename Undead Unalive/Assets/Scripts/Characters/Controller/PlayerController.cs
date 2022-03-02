@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float JumpHeight = 1;
     public float gravity = 9.81f;
     public LayerMask groundMask;
+    public bool forceCameraOnPlayer = false;
 
     /*
      *
@@ -41,8 +42,12 @@ public class PlayerController : MonoBehaviour
         _playerHeight = _characterController.height;
         _playerRadius = _characterController.radius;
 
-        _mainCamera = GameObject.Find(cameraName).GetComponent<Camera>();
-        _mainCamera.transform.localPosition = new Vector3(0, _playerHeight / 2 - 0.25f, 0);
+        if(forceCameraOnPlayer)
+        {
+            _mainCamera = GameObject.Find(cameraName).GetComponent<Camera>();
+            if (_mainCamera.transform.parent != transform) _mainCamera.transform.parent = transform;
+            _mainCamera.transform.localPosition = new Vector3(0, _playerHeight / 2 - 0.25f, 0);
+        }
     }
 
     // Update is called once per frame
@@ -76,7 +81,7 @@ public class PlayerController : MonoBehaviour
         if (_isOnGround && _playerVelocity.y < 0)
         {
             // "reset" gravity
-            _playerVelocity.y = -1 / movementSpeed;
+            _playerVelocity.y = -2;
 
             #if DEBUG_GROUND
             foreach (var collision in collisions)
@@ -94,6 +99,8 @@ public class PlayerController : MonoBehaviour
      */
     private void UpdateViewAngle()
     {
+        if (!forceCameraOnPlayer) return;
+        
         var newAngle = _mainCamera.transform.localRotation.eulerAngles.x - InputManager.Instance.InputMouseYAxis;
 
         // angle "below" zero will reset to 360, undo it
