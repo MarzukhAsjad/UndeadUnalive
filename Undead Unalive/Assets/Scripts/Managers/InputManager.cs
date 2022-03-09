@@ -8,8 +8,8 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
 {
     public float InputMouseXAxis { get; private set; }
     public float InputMouseYAxis { get; private set; }
-    public float InputXAxis { get; private set; }
-    public float InputYAxis { get; private set; }
+    public float InputXAxisRaw { get; private set; }
+    public float InputYAxisRaw { get; private set; }
     public bool InputJump { get; private set; }
     
     // Start is called before the first frame update
@@ -20,8 +20,8 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
     {
         InputMouseXAxis = Input.GetAxis("Mouse X");
         InputMouseYAxis = Input.GetAxis("Mouse Y");
-        InputXAxis = Input.GetAxis("Horizontal");
-        InputYAxis = Input.GetAxis("Vertical");
+        InputXAxisRaw = Input.GetAxisRaw("Horizontal");
+        InputYAxisRaw = Input.GetAxisRaw("Vertical");
         InputJump = Input.GetButtonDown("Jump");
     }
 

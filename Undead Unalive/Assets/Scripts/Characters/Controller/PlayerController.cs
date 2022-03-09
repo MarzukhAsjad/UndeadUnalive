@@ -10,13 +10,15 @@ public class PlayerController : MonoBehaviour
      * In editor config
      * 
      */
-    public String cameraName = "Main Camera";
-    public float movementSpeed = 5;
-    public float maxMovementSpeed = 1;
-    public float JumpHeight = 1;
-    public float gravity = 9.81f;
+    public string cameraName = "Main Camera";
+    public float movementSpeed = 4;
+    public float maxMovementSpeed = 5;
+    public float jumpHeight = 1.5f;
+    public float gravity = 35;
     public LayerMask groundMask;
     public bool forceCameraOnPlayer = false;
+    public float cameraSwayDistance = 0.03f;
+    public float cameraBobPeriod = 0.4f;
 
     /*
      *
@@ -24,15 +26,20 @@ public class PlayerController : MonoBehaviour
      * 
      */
     private Camera _mainCamera;
+    private float _cameraDefaultHeight;
 
     private CharacterController _characterController;
     private float _playerHeight;
     private float _playerRadius;
 
-    private Vector3 _playerVelocity = new Vector3();
+    private Vector3 _playerVelocity;
 
-    private bool _isOnGround = false;
+    private bool _isOnGround;
     private float _movementControlRatio = 1;
+
+    private bool _isMoving;
+    private bool _isCameraAnimating;
+    private float _cameraAnimationTimer;
 
     // Start is called before the first frame update
     private void Start()
@@ -42,19 +49,20 @@ public class PlayerController : MonoBehaviour
         _playerHeight = _characterController.height;
         _playerRadius = _characterController.radius;
 
-        if(forceCameraOnPlayer)
+        if (forceCameraOnPlayer)
         {
             _mainCamera = GameObject.Find(cameraName).GetComponent<Camera>();
             if (_mainCamera.transform.parent != transform) _mainCamera.transform.parent = transform;
-            _mainCamera.transform.localPosition = new Vector3(0, _playerHeight / 2 - 0.25f, 0);
+            _cameraDefaultHeight = _playerHeight / 2 - 0.25f;
+            _mainCamera.transform.localPosition = new Vector3(0, _cameraDefaultHeight, 0);
         }
     }
 
     // Update is called once per frame
     private void Update()
     {
-        UpdateViewAngle();
         UpdatePlayerAction();
+        UpdateCameraView();
     }
 
     #if DEBUG_GROUND
@@ -97,10 +105,10 @@ public class PlayerController : MonoBehaviour
      * Event
      * 
      */
-    private void UpdateViewAngle()
+    private void UpdateCameraView()
     {
         if (!forceCameraOnPlayer) return;
-        
+
         var newAngle = _mainCamera.transform.localRotation.eulerAngles.x - InputManager.Instance.InputMouseYAxis;
 
         // angle "below" zero will reset to 360, undo it
@@ -108,21 +116,43 @@ public class PlayerController : MonoBehaviour
 
         _mainCamera.transform.localRotation = Quaternion.Euler(Mathf.Clamp(newAngle, -90, 90), 0, 0);
         transform.Rotate(Vector3.up * InputManager.Instance.InputMouseXAxis);
+
+        if (_isCameraAnimating)
+        {
+            _cameraAnimationTimer += Time.deltaTime;
+
+            var ratio = Mathf.PI / cameraBobPeriod;
+            
+            var sinWalkTime = Mathf.Sin((_cameraAnimationTimer - cameraBobPeriod / 4) * 2 * ratio);
+            sinWalkTime = (sinWalkTime + 1) / 2;
+            var sin2WalkTime = Mathf.Sin(_cameraAnimationTimer * ratio);
+
+            var mainCameraTransform = _mainCamera.transform;
+            var temPos = mainCameraTransform.localPosition;
+            temPos.x = sin2WalkTime * cameraSwayDistance * 2;
+            temPos.y = _cameraDefaultHeight + sinWalkTime * cameraSwayDistance;
+            mainCameraTransform.localPosition = temPos;
+        }
     }
 
     private void UpdatePlayerAction()
     {
         var temTransform = transform;
 
+        print(InputManager.Instance.InputYAxisRaw);
+        
         /*
          *
          * Move
          * 
          */
         var unitMovement = new Vector3();
-        unitMovement += temTransform.right * InputManager.Instance.InputXAxis;
-        unitMovement += temTransform.forward * InputManager.Instance.InputYAxis;
+        unitMovement += temTransform.right * InputManager.Instance.InputXAxisRaw;
+        unitMovement += temTransform.forward * InputManager.Instance.InputYAxisRaw;
         unitMovement = unitMovement.normalized; // no boost for diag
+
+        _isMoving = unitMovement.magnitude > float.Epsilon;
+        _isCameraAnimating = _isMoving && _isOnGround;
 
         var verticalVelocity = _playerVelocity.y; // backup
         _playerVelocity *= _isOnGround ? 0.1f : 0.999f; // friction
@@ -142,7 +172,7 @@ public class PlayerController : MonoBehaviour
          */
         if (_isOnGround && InputManager.Instance.InputJump)
         {
-            _playerVelocity.y = Mathf.Sqrt(JumpHeight * gravity * 2);
+            _playerVelocity.y = Mathf.Sqrt(jumpHeight * gravity * 2);
         }
 
         /*
