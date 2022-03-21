@@ -1,6 +1,6 @@
 // #define DEBUG_GROUND
 
-using System;
+using Characters.Entity;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -78,7 +78,20 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         _playerVelocity.y -= (gravity * Time.deltaTime);
+        var isLastFrameOnGround = _isOnGround;
         _isOnGround = Physics.CheckBox(_characterController.transform.position - new Vector3(0, _playerHeight / 2 + 0.2f, 0), new Vector3(_playerRadius, 0.2f, _playerRadius), Quaternion.identity, groundMask);
+
+        // fall damage
+        if (!isLastFrameOnGround && _isOnGround)
+        {
+            var diff = _playerVelocity.y + gravity / 2;
+            print(diff);
+
+            if (diff < 0)
+            {
+                GetComponent<CharacterEntity>().AddDeltaHealth(diff);
+            }
+        }
 
         #if DEBUG_GROUND
         var collisions = Physics.OverlapSphere(_characterController.transform.position - new Vector3(0, _playerHeight / 2, 0), 1, groundMask);
@@ -122,7 +135,7 @@ public class PlayerController : MonoBehaviour
             _cameraAnimationTimer += Time.deltaTime;
 
             var ratio = Mathf.PI / cameraBobPeriod;
-            
+
             var sinWalkTime = Mathf.Sin((_cameraAnimationTimer - cameraBobPeriod / 4) * 2 * ratio);
             sinWalkTime = (sinWalkTime + 1) / 2;
             var sin2WalkTime = Mathf.Sin(_cameraAnimationTimer * ratio);
@@ -139,8 +152,6 @@ public class PlayerController : MonoBehaviour
     {
         var temTransform = transform;
 
-        print(InputManager.Instance.InputYAxisRaw);
-        
         /*
          *
          * Move
