@@ -85,7 +85,6 @@ public class PlayerController : MonoBehaviour
         if (!isLastFrameOnGround && _isOnGround)
         {
             var diff = _playerVelocity.y + gravity / 2;
-            print(diff);
 
             if (diff < 0)
             {

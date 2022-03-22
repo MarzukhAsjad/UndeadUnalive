@@ -8,6 +8,13 @@ namespace Interface
 {
     public class PlayerHUDController : MonoBehaviourSingleton<PlayerHUDController>
     {
+        /*
+         *
+         *  Prefab
+         * 
+         */
+        [SerializeField] private GameObject gameOverScreen;
+
         private GameObject _playerHUDObject;
         private CharacterEntity _playerEntity;
 
@@ -46,14 +53,14 @@ namespace Interface
             if (Math.Abs(_trackingMaxHealth - maxHealth) > float.Epsilon)
             {
                 _trackingMaxHealth = maxHealth;
-                
+
                 var newWidth = _defaultHealthBarWidth * (maxHealth / _playerEntity.GetDefaultMaxHealth());
 
                 var temAnchor = _healthBarRect.anchoredPosition;
                 temAnchor.x = _defaultHealthBarPosX + (newWidth - _defaultHealthBarWidth) / 2;
                 _healthBarRect.anchoredPosition = temAnchor;
-                
-                
+
+
                 var temSizeDelta = _healthBarRect.sizeDelta;
                 temSizeDelta.x = newWidth;
                 _healthBarRect.sizeDelta = temSizeDelta;
@@ -62,7 +69,9 @@ namespace Interface
             _healthBarSlider.value = _playerEntity.GetHealth() / _playerEntity.GetMaxHealth();
         }
 
-        // Update is called once per frame
-        void Update() { }
+        public void DoGameOverScreen()
+        {
+            Instantiate(gameOverScreen);
+        }
     }
 }

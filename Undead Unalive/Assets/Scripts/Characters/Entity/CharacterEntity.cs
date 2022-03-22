@@ -8,13 +8,13 @@ namespace Characters.Entity
         private const float DefaultMaxHealth = 100;
         private float _maxHealth = DefaultMaxHealth;
 
-        public UnityEvent onHealthChanged = default;
+        public UnityEvent onHealthChanged = new();
         private float _health = DefaultMaxHealth;
 
         public void ChangeHealth(float newHealth)
         {
             _health = newHealth;
-            onHealthChanged.Invoke();
+            onHealthChanged?.Invoke();
         }
 
         public void AddDeltaHealth(float deltaHealth)
@@ -25,24 +25,24 @@ namespace Characters.Entity
         public void ChangeMaxHealth(float newMaxHealth)
         {
             _maxHealth = newMaxHealth;
-            onHealthChanged.Invoke();
+            onHealthChanged?.Invoke();
         }
 
         public void AddDeltaMaxHealth(float deltaMaxHealth)
         {
             ChangeMaxHealth(_maxHealth + deltaMaxHealth);
         }
-        
+
         public float GetHealth()
         {
             return _health;
         }
-        
+
         public float GetDefaultMaxHealth()
         {
             return DefaultMaxHealth;
         }
-        
+
         public float GetMaxHealth()
         {
             return _maxHealth;

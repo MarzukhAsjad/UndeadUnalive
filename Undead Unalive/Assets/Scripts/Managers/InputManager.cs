@@ -6,6 +6,9 @@ using Utilities;
 
 public class InputManager : MonoBehaviourSingleton<InputManager>
 {
+    private bool _disabledAxisInput = false;
+    private bool _disabledJump = false;
+    
     public float InputMouseXAxis { get; private set; }
     public float InputMouseYAxis { get; private set; }
     public float InputXAxisRaw { get; private set; }
@@ -18,13 +21,38 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
     // Update is called once per frame
     private void Update()
     {
-        InputMouseXAxis = Input.GetAxis("Mouse X");
-        InputMouseYAxis = Input.GetAxis("Mouse Y");
-        InputXAxisRaw = Input.GetAxisRaw("Horizontal");
-        InputYAxisRaw = Input.GetAxisRaw("Vertical");
-        InputJump = Input.GetButtonDown("Jump");
+        if(!_disabledAxisInput)
+        {
+            InputMouseXAxis = Input.GetAxis("Mouse X");
+            InputMouseYAxis = Input.GetAxis("Mouse Y");
+            InputXAxisRaw = Input.GetAxisRaw("Horizontal");
+            InputYAxisRaw = Input.GetAxisRaw("Vertical");
+        }
+
+        if (!_disabledJump)
+        {
+            InputJump = Input.GetButtonDown("Jump");
+        }
     }
 
+    public void DisabledAxisInput()
+    {
+        _disabledAxisInput = true;
+        InputMouseXAxis = InputMouseYAxis = InputXAxisRaw = InputYAxisRaw = 0;
+    }
+    
+    public void DisabledJumpInput()
+    {
+        _disabledJump = true;
+        InputJump = false;
+    }
+    
+    public void DisabledAllUserInput()
+    {
+        DisabledAxisInput();
+        DisabledJumpInput();
+    }
+    
     public static void LockMouse()
     {
         Cursor.lockState = CursorLockMode.Locked;
