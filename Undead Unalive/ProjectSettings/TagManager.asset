@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerHUD
   - Player
+  - DecreaseBar
   layers:
   - Default
   - TransparentFX

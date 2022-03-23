@@ -50,8 +50,8 @@ namespace Characters.Entity
 
         private void Update()
         {
-            AddDeltaMaxHealth(Time.deltaTime);
-            AddDeltaHealth(Time.deltaTime / 2);
+            // AddDeltaMaxHealth(Time.deltaTime);
+            // AddDeltaHealth(Time.deltaTime / 2);
         }
     }
 }

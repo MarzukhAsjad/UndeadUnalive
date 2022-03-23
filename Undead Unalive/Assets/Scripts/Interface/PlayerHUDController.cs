@@ -1,7 +1,7 @@
-using System;
 using Characters.Entity;
+using Interface.Controller;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using Utilities;
 
 namespace Interface
@@ -16,57 +16,27 @@ namespace Interface
         [SerializeField] private GameObject gameOverScreen;
 
         private GameObject _playerHUDObject;
+        private GameObject _healthBar;
+
         private CharacterEntity _playerEntity;
 
-        private GameObject _healthBar;
-        private Slider _healthBarSlider;
-        private RectTransform _healthBarRect;
-        private float _trackingMaxHealth;
-        private float _defaultHealthBarWidth;
-        private float _defaultHealthBarPosX;
+        private readonly UnityEvent<float, float> _healthChangeProxy = new();
 
-        // Start is called before the first frame update
-        void Start()
+        private void OnEnable()
         {
             _playerHUDObject = GameObject.FindWithTag("PlayerHUD")?.gameObject;
             Debug.Assert(_playerHUDObject != null);
 
             _playerEntity = GameObject.FindWithTag("Player")?.GetComponent<CharacterEntity>();
             Debug.Assert(_playerEntity != null);
-            _playerEntity.onHealthChanged.AddListener(OnHealthChange);
-
+            
             _healthBar = _playerHUDObject.transform.Find("HealthBar").gameObject;
-            _healthBarSlider = _healthBar.GetComponent<Slider>();
-            _healthBarRect = _healthBar.GetComponent<Slider>().GetComponent<RectTransform>();
-            var rect = _healthBarRect.rect;
-            _defaultHealthBarWidth = _healthBarRect.sizeDelta.x;
-            _defaultHealthBarPosX = _healthBarRect.anchoredPosition.x;
-            _trackingMaxHealth = _playerEntity.GetDefaultMaxHealth();
-
-            OnHealthChange();
-        }
-
-        private void OnHealthChange()
-        {
-            var maxHealth = _playerEntity.GetMaxHealth();
-
-            if (Math.Abs(_trackingMaxHealth - maxHealth) > float.Epsilon)
-            {
-                _trackingMaxHealth = maxHealth;
-
-                var newWidth = _defaultHealthBarWidth * (maxHealth / _playerEntity.GetDefaultMaxHealth());
-
-                var temAnchor = _healthBarRect.anchoredPosition;
-                temAnchor.x = _defaultHealthBarPosX + (newWidth - _defaultHealthBarWidth) / 2;
-                _healthBarRect.anchoredPosition = temAnchor;
-
-
-                var temSizeDelta = _healthBarRect.sizeDelta;
-                temSizeDelta.x = newWidth;
-                _healthBarRect.sizeDelta = temSizeDelta;
-            }
-
-            _healthBarSlider.value = _playerEntity.GetHealth() / _playerEntity.GetMaxHealth();
+            
+            _playerEntity.onHealthChanged.AddListener(() => _healthChangeProxy.Invoke(_playerEntity.GetHealth(), _playerEntity.GetDefaultMaxHealth()));
+            var barController = _healthBar.AddComponent<BarController>();
+            barController.changeEvent = _healthChangeProxy;
+            barController.defaultValue = _playerEntity.GetHealth();
+            barController.defaultMax = _playerEntity.GetDefaultMaxHealth();
         }
 
         public void DoGameOverScreen()
