@@ -8,12 +8,16 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
 {
     private bool _disabledAxisInput = false;
     private bool _disabledJump = false;
+    private bool _disabledKeyInput = false;
     
     public float InputMouseXAxis { get; private set; }
     public float InputMouseYAxis { get; private set; }
     public float InputXAxisRaw { get; private set; }
     public float InputYAxisRaw { get; private set; }
     public bool InputJump { get; private set; }
+
+    public bool KeyInteract { get; private set; }
+    public Vector2 MousePosition { get; private set; }
     
     // Start is called before the first frame update
     // void Start() { }
@@ -27,11 +31,17 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
             InputMouseYAxis = Input.GetAxis("Mouse Y");
             InputXAxisRaw = Input.GetAxisRaw("Horizontal");
             InputYAxisRaw = Input.GetAxisRaw("Vertical");
+            MousePosition = Input.mousePosition;
         }
 
         if (!_disabledJump)
         {
             InputJump = Input.GetButtonDown("Jump");
+        }
+
+        if (!_disabledKeyInput)
+        {
+            KeyInteract = Input.GetKeyDown(KeyCode.E);
         }
     }
 
@@ -47,10 +57,17 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
         InputJump = false;
     }
     
+    public void DisabledKeyInput()
+    {
+        _disabledKeyInput = true;
+        KeyInteract = false;
+    }
+    
     public void DisabledAllUserInput()
     {
         DisabledAxisInput();
         DisabledJumpInput();
+        DisabledKeyInput();
     }
     
     public static void LockMouse()

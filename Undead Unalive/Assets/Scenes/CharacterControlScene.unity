@@ -786,6 +786,7 @@ GameObject:
   - component: {fileID: 635962549}
   - component: {fileID: 635962548}
   - component: {fileID: 635962552}
+  - component: {fileID: 635962553}
   m_Layer: 0
   m_Name: Floor1
   m_TagString: Untagged
@@ -887,6 +888,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &635962553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635962547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 707b048edc5e4d82aaedfb1020c0c9c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &641158849
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,6 +2054,7 @@ GameObject:
   - component: {fileID: 2055434982}
   - component: {fileID: 2055434981}
   - component: {fileID: 2055434980}
+  - component: {fileID: 2055434984}
   m_Layer: 5
   m_Name: playerHUD
   m_TagString: PlayerHUD
@@ -2131,3 +2145,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2055434984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2055434979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 707b048edc5e4d82aaedfb1020c0c9c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

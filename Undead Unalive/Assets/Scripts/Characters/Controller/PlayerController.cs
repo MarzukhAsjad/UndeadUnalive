@@ -1,6 +1,7 @@
 // #define DEBUG_GROUND
 
 using Characters.Entity;
+using Interface.Player;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -41,6 +42,9 @@ public class PlayerController : MonoBehaviour
     private bool _isCameraAnimating;
     private float _cameraAnimationTimer;
 
+    private PlayerInteractable _PlayerInteractableRaycastResult;
+    // private GameObject _raycastObject;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -63,6 +67,8 @@ public class PlayerController : MonoBehaviour
     {
         UpdatePlayerAction();
         UpdateCameraView();
+        UpdateRaycast();
+        KeyInputHandler();
     }
 
     #if DEBUG_GROUND
@@ -191,5 +197,28 @@ public class PlayerController : MonoBehaviour
          * 
          */
         _characterController.Move(Time.deltaTime * _playerVelocity);
+    }
+
+    void UpdateRaycast()
+    {
+        var hits = new RaycastHit[10];
+        var size = Physics.RaycastNonAlloc(_mainCamera.ScreenPointToRay(InputManager.Instance.MousePosition), hits);
+        for (var i = 0; i < size; ++i)
+            if (hits[i].transform.gameObject.TryGetComponent(out _PlayerInteractableRaycastResult))
+                return;
+
+        _PlayerInteractableRaycastResult = null;
+    }
+
+
+    void KeyInputHandler()
+    {
+        if (InputManager.Instance.KeyInteract)
+        {
+            if (_PlayerInteractableRaycastResult != null)
+            {
+                _PlayerInteractableRaycastResult.OnInteract(gameObject);
+            }
+        }
     }
 }
