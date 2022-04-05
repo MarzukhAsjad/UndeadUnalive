@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickupVaccine : MonoBehaviour
 {
@@ -9,7 +10,10 @@ public class PickupVaccine : MonoBehaviour
     Characters.Entity.CharacterEntity player;
     private void OnTriggerEnter(Collider other)
     {
-        player.ChangeHealth(100);
-        Destroy(gameObject);
+        if (other.CompareTag("Player"))
+        {
+            ScoringSystem.vaccineCount += 1;
+            gameObject.SetActive(false);
+        }
     }
 }

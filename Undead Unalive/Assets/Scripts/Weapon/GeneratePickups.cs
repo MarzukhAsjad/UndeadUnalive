@@ -16,10 +16,10 @@ public class GeneratePickups : MonoBehaviour
 
     IEnumerator pickupDrop()
     {
-        while(pickupCount<10)
+        while(pickupCount<5)
         {
-            xPos = Random.Range(1, 4500);
-            zPos = Random.Range(1, 3000);
+            xPos = Random.Range(25, 75);
+            zPos = Random.Range(-25, 90);
             Instantiate(thePickup, new Vector3(xPos, 1, zPos), Quaternion.identity);
             yield return new WaitForSeconds(0.1f);
             pickupCount += 1;

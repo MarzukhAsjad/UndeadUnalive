@@ -9,7 +9,7 @@ public class PickupMask : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        player.ChangeHealth(100);
-        Destroy(gameObject);
+        ScoringSystem.maskCount += 1;
+        gameObject.SetActive(false);
     }
 }
