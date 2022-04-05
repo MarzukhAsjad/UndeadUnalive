@@ -15,6 +15,8 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
     public float InputXAxisRaw { get; private set; }
     public float InputYAxisRaw { get; private set; }
     public bool InputJump { get; private set; }
+    
+    public bool InputSprint { get; private set; }
 
     public bool KeyInteract { get; private set; }
     public Vector2 MousePosition { get; private set; }
@@ -42,6 +44,7 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
         if (!_disabledKeyInput)
         {
             KeyInteract = Input.GetKeyDown(KeyCode.E);
+            InputSprint = Input.GetKey(KeyCode.LeftShift);
         }
     }
 

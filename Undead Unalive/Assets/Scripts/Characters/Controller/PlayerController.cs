@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public string cameraName = "Main Camera";
     public float movementSpeed = 4;
     public float maxMovementSpeed = 5;
+    public float sprintMultiplier = 1.5f;
     public float jumpHeight = 1.5f;
     public float gravity = 35;
     public LayerMask groundMask;
@@ -137,7 +138,11 @@ public class PlayerController : MonoBehaviour
 
         if (_isCameraAnimating)
         {
-            _cameraAnimationTimer += Time.deltaTime;
+            var deltaTime = Time.deltaTime;
+            if (_isOnGround && InputManager.Instance.InputSprint)
+                deltaTime *= sprintMultiplier;
+
+            _cameraAnimationTimer += deltaTime;
 
             var ratio = Mathf.PI / cameraBobPeriod;
 
@@ -174,11 +179,15 @@ public class PlayerController : MonoBehaviour
         _playerVelocity *= _isOnGround ? 0.1f : 0.999f; // friction
         _playerVelocity += movementSpeed * unitMovement * _movementControlRatio; // player control
 
+        var maxSpeed = maxMovementSpeed;
+        if (_isOnGround && InputManager.Instance.InputSprint)
+            maxSpeed *= sprintMultiplier;
+
         // cap max speed
         _playerVelocity.y = 0;
-        if (_playerVelocity.magnitude > maxMovementSpeed)
-            _playerVelocity = _playerVelocity.normalized * maxMovementSpeed;
-
+        if (_playerVelocity.magnitude > maxSpeed)
+            _playerVelocity = _playerVelocity.normalized * maxSpeed;
+        
         _playerVelocity.y = verticalVelocity; // restore
 
         /*
@@ -215,7 +224,7 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.Instance.KeyInteract)
         {
-            if (_PlayerInteractableRaycastResult != null)
+            if (_PlayerInteractableRaycastResult is not null)
             {
                 _PlayerInteractableRaycastResult.OnInteract(gameObject);
             }

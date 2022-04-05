@@ -335,8 +335,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraName: Main Camera
-  movementSpeed: 4
+  movementSpeed: 10
   maxMovementSpeed: 5
+  sprintMultiplier: 2
   jumpHeight: 1.5
   gravity: 35
   groundMask:
@@ -2083,7 +2084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03fbbcd45f14cd0bccc077e614a3145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thePickup: {fileID: 1232789029339246941, guid: a24531a4313cdb5448eec37ebdc2865d, type: 3}
+  thePickup: {fileID: 1150400918832918121, guid: a24531a4313cdb5448eec37ebdc2865d, type: 3}
   xPos: 0
   zPos: 0
   pickupCount: 0
@@ -2318,7 +2319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03fbbcd45f14cd0bccc077e614a3145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thePickup: {fileID: 6685061479865306503, guid: b0470ddae04e0d941a791e15603781f5, type: 3}
+  thePickup: {fileID: 8524132599166067129, guid: b0470ddae04e0d941a791e15603781f5, type: 3}
   xPos: 0
   zPos: 0
   pickupCount: 0
