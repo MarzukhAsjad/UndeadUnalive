@@ -1619,6 +1619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverScreen: {fileID: 8535691675596903245, guid: fd719ca3de404674ea5a56522e925845, type: 3}
+  enemyIndicatorPrefab: {fileID: 8254054588815910027, guid: 2ba0ccba574c43a4789d6e2ac64f42f5, type: 3}
 --- !u!4 &1424367700
 Transform:
   m_ObjectHideFlags: 0
