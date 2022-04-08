@@ -1,12 +1,13 @@
 using System;
 using Characters.Entity;
 using Interface.Controller;
+using Interface.Player;
 using UnityEngine;
 using UnityEngine.Events;
 using Utilities;
 using Random = UnityEngine.Random;
 
-namespace Interface
+namespace UserInterface
 {
     using EnemyType = GameObject;
     public class PlayerHUDController : MonoBehaviourSingleton<PlayerHUDController>
@@ -69,7 +70,9 @@ namespace Interface
                 var ranPos = Random.insideUnitCircle * 10;
                 newObj.transform.position = new Vector3(ranPos.x, 1, ranPos.y);
                 newObj.AddComponent<Rigidbody>();
+                newObj.AddComponent<PlayerInteractableExplosion>();
 
+                Destroy(newObj, 2.5f);
                 EnemyNotifyPlayer(newObj);
 
                 timer = 0;
