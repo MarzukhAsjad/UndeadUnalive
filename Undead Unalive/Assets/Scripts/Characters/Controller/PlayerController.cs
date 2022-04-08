@@ -43,7 +43,10 @@ public class PlayerController : MonoBehaviour
     private bool _isCameraAnimating;
     private float _cameraAnimationTimer;
 
-    private PlayerInteractable _PlayerInteractableRaycastResult;
+    private Vector3 _playerDefaultHandPosition;
+    
+    private PlayerInteractable _playerInteractableRaycastResult;
+    private Vector3 _playerInteractableRaycastResultPosition;
     // private GameObject _raycastObject;
 
     // Start is called before the first frame update
@@ -61,6 +64,8 @@ public class PlayerController : MonoBehaviour
             _cameraDefaultHeight = _playerHeight / 2 - 0.25f;
             _mainCamera.transform.localPosition = new Vector3(0, _cameraDefaultHeight, 0);
         }
+
+        _playerDefaultHandPosition = _mainCamera.transform.GetChild(0).localPosition;
     }
 
     // Update is called once per frame
@@ -155,6 +160,14 @@ public class PlayerController : MonoBehaviour
             temPos.x = sin2WalkTime * cameraSwayDistance * 2;
             temPos.y = _cameraDefaultHeight + sinWalkTime * cameraSwayDistance;
             mainCameraTransform.localPosition = temPos;
+            
+            // hand movement
+            temPos.x = (1 - sin2WalkTime) * cameraSwayDistance * 2;
+            temPos.y = _cameraDefaultHeight + (1 - sinWalkTime) * cameraSwayDistance;
+            temPos.z = 0;
+            
+            temPos.Scale(mainCameraTransform.GetChild(0).localScale);
+            mainCameraTransform.GetChild(0).localPosition = _playerDefaultHandPosition + temPos;
         }
     }
 
@@ -211,12 +224,25 @@ public class PlayerController : MonoBehaviour
     void UpdateRaycast()
     {
         var hits = new RaycastHit[10];
-        var size = Physics.RaycastNonAlloc(_mainCamera.ScreenPointToRay(InputManager.Instance.MousePosition), hits);
-        for (var i = 0; i < size; ++i)
-            if (hits[i].transform.gameObject.TryGetComponent(out _PlayerInteractableRaycastResult))
-                return;
+        var ray = _mainCamera.ScreenPointToRay(_mainCamera.pixelRect.center);
+        var size = Physics.RaycastNonAlloc(ray, hits);
 
-        _PlayerInteractableRaycastResult = null;
+        _playerInteractableRaycastResult = null;
+        
+        float minDistance = float.MaxValue;
+        for (var i = 0; i < size; ++i)
+        {
+            if (hits[i].transform.gameObject.TryGetComponent(out PlayerInteractable hitResult))
+            {
+                var temDistance = (ray.origin - hits[i].point).magnitude;
+                if (temDistance < minDistance)
+                {
+                    minDistance = temDistance;
+                    _playerInteractableRaycastResultPosition = hits[i].point;
+                    _playerInteractableRaycastResult = hitResult;
+                }
+            }
+        }
     }
 
 
@@ -224,9 +250,9 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.Instance.KeyInteract)
         {
-            if (_PlayerInteractableRaycastResult is not null)
+            if (_playerInteractableRaycastResult is not null)
             {
-                _PlayerInteractableRaycastResult.OnInteract(gameObject);
+                _playerInteractableRaycastResult.OnInteract(gameObject, _playerInteractableRaycastResultPosition);
             }
         }
     }
