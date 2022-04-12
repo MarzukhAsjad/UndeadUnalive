@@ -9,6 +9,8 @@ public class ScoringSystem : MonoBehaviour
     public static int vaccineCount;
     public Text maskDisplay;
     public static int maskCount;
+    public Text grenadeDisplay;
+    public static int grenadeCount;
 
 
     // Update is called once per frame
@@ -16,5 +18,6 @@ public class ScoringSystem : MonoBehaviour
     {
         vaccineDisplay.text = "" + vaccineCount;
         maskDisplay.text = "" + maskCount;
+        grenadeDisplay.text = "" + grenadeCount;
     }
 }
