@@ -11,6 +11,10 @@ public class AIExample : MonoBehaviour {
 
     public PlayerController pc;
 
+<<<<<<< Updated upstream
+=======
+    public PlayerController pc;
+>>>>>>> Stashed changes
     public WanderType wanderType = WanderType.Random;
     
     public float wanderSpeed = 4f;
@@ -26,20 +30,33 @@ public class AIExample : MonoBehaviour {
     private NavMeshAgent agent;
     private Renderer renderer;
     private int waypointIndex = 0;
+<<<<<<< Updated upstream
     private Animator animator;
     private float loseTimer = 0;
     
+=======
+    private Animator animator;
+    public Transform player;
+    
+>>>>>>> Stashed changes
     public void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        player = GameObject.Find("Player").transform;
         renderer = GetComponent<Renderer>();
         animator = GetComponentInChildren<Animator>();
         wanderPoint = RandomWanderPoint();
     }
     public void Update()
     {
+<<<<<<< Updated upstream
         if (isAware) {
             print("chasing");
+=======
+        if (isAware)
+        {
+            agent.SetDestination(player.position);
+>>>>>>> Stashed changes
             animator.SetBool("Aware", true);
             agent.SetDestination(pc.transform.position);
             if (!isDetecting)
@@ -67,6 +84,7 @@ public class AIExample : MonoBehaviour {
 
     public void SearchForPlayer()
     {
+<<<<<<< Updated upstream
         print("hello");
         if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)) < 120f)
         {
@@ -86,6 +104,21 @@ public class AIExample : MonoBehaviour {
         else
         {
             isDetecting = false;
+=======
+        if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(player.position)) < fov / 2f)
+        {
+            if (Vector3.Distance(player.position, transform.position) < viewDistance)
+            {
+                RaycastHit hit;
+                if (Physics.Linecast(transform.position, player.position, out hit, -1))
+                {
+                    if (hit.transform.CompareTag("Player"))
+                    {
+                        OnAware();
+                    }
+                }
+            }
+>>>>>>> Stashed changes
         }
     }
 
