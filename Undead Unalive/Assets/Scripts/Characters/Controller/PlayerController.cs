@@ -26,10 +26,11 @@ public class PlayerController : MonoBehaviour
      * Properties
      * 
      */
-    private Camera _mainCamera;
+    public Camera _mainCamera;
     private float _cameraDefaultHeight;
 
     private CharacterController _characterController;
+    private CollisionFlags _CollisionFlags;
     private float _playerHeight;
     private float _playerRadius;
 
@@ -209,7 +210,7 @@ public class PlayerController : MonoBehaviour
 
         _PlayerInteractableRaycastResult = null;
     }
-
+   
 
     void KeyInputHandler()
     {

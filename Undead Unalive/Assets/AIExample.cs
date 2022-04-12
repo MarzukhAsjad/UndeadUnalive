@@ -1,31 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets.Characters.FirstPerson;
 using UnityEngine.AI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class AIExample : MonoBehaviour {
 
-    public enum WanderType { Random, Waypoint};
+    public enum WanderType {Random, Waypoint};
 
 
-    public FirstPersonController fpsc;
+    public PlayerController pc;
+
     public WanderType wanderType = WanderType.Random;
+    
     public float wanderSpeed = 4f;
     public float chaseSpeed = 7f;
-    public float fov = 120f;
     public float viewDistance = 10f;
     public float wanderRadius = 7f;
+    public float loseThreshold = 10f;
     public Transform[] waypoints; //Array of waypoints is only used when waypoint wandering is selected
 
     private bool isAware = false;
+    private bool isDetecting = false;
     private Vector3 wanderPoint;
     private NavMeshAgent agent;
     private Renderer renderer;
     private int waypointIndex = 0;
     private Animator animator;
+    private float loseTimer = 0;
     
-
     public void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -35,43 +38,63 @@ public class AIExample : MonoBehaviour {
     }
     public void Update()
     {
-        if (isAware)
-        {
-            agent.SetDestination(fpsc.transform.position);
+        if (isAware) {
+            print("chasing");
             animator.SetBool("Aware", true);
-            agent.speed = chaseSpeed;
+            agent.SetDestination(pc.transform.position);
+            if (!isDetecting)
+            {
+                loseTimer += Time.deltaTime;
+                if (loseTimer >= loseThreshold)
+                {
+                    isAware = false;
+                    loseTimer = 0;
+                }
+            }
             //renderer.material.color = Color.red;
-        } else
+        }
+        else
         {
-            SearchForPlayer();
+            print("searching for player");
             Wander();
+            print("Wander");
             animator.SetBool("Aware", false);
             agent.speed = wanderSpeed;
             //renderer.material.color = Color.blue;
         }
+        SearchForPlayer();
     }
 
     public void SearchForPlayer()
     {
-        if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(fpsc.transform.position)) < fov / 2f)
+        print("hello");
+        if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)) < 120f)
         {
-            if (Vector3.Distance(fpsc.transform.position, transform.position) < viewDistance)
+            print(Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)));
+
+            if (Vector3.Distance(pc.transform.position, transform.position) < viewDistance)
             {
-                RaycastHit hit;
-                if (Physics.Linecast(transform.position, fpsc.transform.position, out hit, -1))
-                {
-                    if (hit.transform.CompareTag("Player"))
-                    {
-                        OnAware();
-                    }
-                }
+                print(Vector3.Distance(pc.transform.position, transform.position));
+                print("distance matches");
+                OnAware();
             }
+            else
+            {
+                isDetecting = false;
+            }
+        }
+        else
+        {
+            isDetecting = false;
         }
     }
 
     public void OnAware()
     {
+        print("Aware entered");
         isAware = true;
+        isDetecting = false;
+        loseTimer = 0;
     }
 
     public void Wander()
