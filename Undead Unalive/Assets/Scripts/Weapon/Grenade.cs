@@ -6,6 +6,7 @@ public class Grenade : MonoBehaviour
 {
 
     public float delay = 2f;
+    public float radius = 5f;
 
     float countdown;
 
@@ -24,6 +25,7 @@ public class Grenade : MonoBehaviour
         countdown -= Time.deltaTime;
         if(countdown <=0f && !hasExploded)
         {
+            Debug.Log("Boom");
             Explode();
             hasExploded = true;
         }
@@ -34,6 +36,15 @@ public class Grenade : MonoBehaviour
         Instantiate(explosionEffect, transform.position, transform.rotation);
         // Show explosion effect
 
+        Collider[] colliders =  Physics.OverlapSphere(transform.position, radius);
+
+        foreach (Collider nearbyObject in colliders)
+        {
+            if (nearbyObject.tag == "Zombie")
+            {
+                Destroy(nearbyObject.gameObject);
+            }
+        }
         // Get nearby object and damage them
 
         // Remove grenade
