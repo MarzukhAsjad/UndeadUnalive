@@ -1,3 +1,15 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: a03fbbcd45f14cd0bccc077e614a3145
-timeCreated: 1647955513
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - theVaccine: {instanceID: 0}
+  - theMask: {instanceID: 0}
+  - theGrenade: {instanceID: 0}
+  - ParentCube: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

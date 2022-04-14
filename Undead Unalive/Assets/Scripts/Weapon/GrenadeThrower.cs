@@ -11,8 +11,9 @@ public class GrenadeThrower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.G) && ScoringSystem.grenadeCount==0)
+        if (Input.GetKey(KeyCode.G) && ScoringSystem.grenadeCount>=1)
         {
+            Debug.Log("BOOM");
             ThrowGrenade();
         }
     }
@@ -22,5 +23,6 @@ public class GrenadeThrower : MonoBehaviour
         GameObject grenadeObject = Instantiate(grenade, transform.position, transform.rotation);
         Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * throwForce, ForceMode.VelocityChange);
+        ScoringSystem.grenadeCount -= 1;
     }
 }
