@@ -58,26 +58,9 @@ namespace UserInterface
             activeCamera = Camera.main;
             _enemyIndicatorList = gameObject.AddComponent<TimeoutList>();
         }
-
-        private float timer = 0;
-
+        
         private void Update()
         {
-            timer += Time.deltaTime;
-            if (timer > 0.5f)
-            {
-                var newObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                var ranPos = Random.insideUnitCircle * 10;
-                newObj.transform.position = new Vector3(ranPos.x, 1, ranPos.y);
-                newObj.AddComponent<Rigidbody>();
-                newObj.AddComponent<PlayerInteractableExplosion>();
-
-                Destroy(newObj, 2.5f);
-                EnemyNotifyPlayer(newObj);
-
-                timer = 0;
-            }
-
             _enemyIndicatorList.ForEach((k, d) =>
             {
                 FindScreenEdgeLocationForWorldLocation(((GameObject)k).transform.position, 0.9f, out var outScreenPosition, out var outRotationAngleDegrees, out var bIsOnScreen);
