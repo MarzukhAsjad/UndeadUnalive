@@ -9,19 +9,28 @@ namespace Characters.Controller
     {
         public NavMeshAgent agent;
         public GameObject safeHouse;
-        public GameObject player;
-        public Rigidbody rb;
+        public int shieldRadius;
 
-        //get the position of the safe house
 
+        private GameObject player;
+        private Rigidbody rb;
         private bool enable;
-        private float distance; 
-
+        private float distance;
+        private Animator animator;
+        private Vector3 pos = new Vector3(204.29f, 0, 296.37f);
+        
         public void Start()
         {
+            safeHouse = new GameObject();
+            safeHouse.transform.position = pos; 
+
             agent = this.GetComponent<NavMeshAgent>();
+            rb = this.GetComponent<Rigidbody>();
+            animator = this.GetComponent<Animator>();
+            player = GameObject.FindGameObjectWithTag("Player"); 
+
             enable = true;
-            rb = this.GetComponent<Rigidbody>(); 
+            shieldRadius = 5; 
 
         }
 
@@ -29,38 +38,69 @@ namespace Characters.Controller
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
+                Debug.Log("Z key pressed"); 
                 //change the value of enable
                 if (enable == true)
                 {
                     enable = false; 
-                } else
-                {
+                } else {
                     enable = true; 
                 }
             }
 
-            if (!enable) //if disabled, mob should return to the safe house
+            //if disabled, mob should return to the safe house
+            if (!enable)
             {
-                agent.SetDestination(safeHouse.transform.position); 
+                agent.SetDestination(safeHouse.transform.position);
+                Walk(); 
 
-            } else { //mob should follow player
+            }
+
+            else //mob should follow player
+            { 
 
                 distance = Vector3.Distance(player.transform.position, this.transform.position); 
                 
-                if(distance > 1)
-                {
-                    agent.SetDestination(player.transform.position); 
+                if (distance > shieldRadius) {
+                   
+                    agent.SetDestination(player.transform.position);
+                    Walk(); 
 
-                }
-                else //if distance is less than 1, stop
-                {
+                } else { //if distance is less than 1, stop
+
+                    agent.SetDestination(this.transform.position);
                     rb.velocity = new Vector3(0, 0, 0); 
+                    Idle(); 
                 }
 
             }
        
         }
 
+        //make the survivor walk
+        public void Walk() 
+        {
+            animator.SetBool("Walk", true);
+            animator.SetBool("Idle", false);
+            animator.SetBool("SprintJump_ToLeft_R", false);
+        }
 
+        //make the survivor run
+        public void Run() 
+        {
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", false);
+            animator.SetBool("SprintJump_ToLeft_R", true);
+
+        }
+
+        //make the survivor do nothing, stand idle
+        public void Idle()
+        {
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", true);
+            animator.SetBool("SprintJump_ToLeft_R", false);
+
+        }
     }
 }
