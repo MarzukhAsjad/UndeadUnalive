@@ -9,6 +9,8 @@ namespace Characters.Entity
     {
 
         private CharacterEntity _playerEntity;
+        public float targetTime = 3f;
+        private int threshold = 0;
 
 
         private void Start()
@@ -17,6 +19,11 @@ namespace Characters.Entity
             Debug.Assert(_playerEntity != null);
             
             _playerEntity.onHealthChanged.AddListener(OnPlayerHealthChanged);
+        }
+
+        private void Update()
+        {
+            
         }
 
         private void OnPlayerHealthChanged()
@@ -29,13 +36,26 @@ namespace Characters.Entity
 
         private void OnParticleCollision(GameObject other)
         {
-
-            _playerEntity.ChangeHealth(_playerEntity.GetHealth() - 1.0f);
-            ParticleSystem ps = other.GetComponent<ParticleSystem>();
-            ps.Stop();
-
+            PlayerDamage();
         }
 
+        private void PlayerDamage()
+        {
+            if (ScoringSystem.maskCount >= 1)
+            {
+                threshold += 1;
+                if (threshold == 15)
+                {
+                    ScoringSystem.maskCount -= 1;
+                    threshold = 0;
+                }
+            }
+            else
+            {
+                _playerEntity.ChangeHealth(_playerEntity.GetHealth() - 1.0f);
+            }
+
+        }
 
     }
 }
