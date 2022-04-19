@@ -40,7 +40,6 @@ public class AIExample : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         wanderPoint = RandomWanderPoint();
         ps = gameObject.GetComponentInChildren<ParticleSystem>();
-        Debug.Log(ps);
     }
     public void Update()
     {

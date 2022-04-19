@@ -8,7 +8,7 @@ public class ScoringSystem : MonoBehaviour
     public Text vaccineDisplay;
     public static int vaccineCount;
     public Text maskDisplay;
-    public static int maskCount;
+    public static int maskCount = 5;
     public Text grenadeDisplay;
     public static int grenadeCount;
 
