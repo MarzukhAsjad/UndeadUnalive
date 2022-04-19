@@ -10,6 +10,7 @@ namespace Characters.Entity
 
         private CharacterEntity _playerEntity;
 
+
         private void Start()
         {
             _playerEntity = GetComponent<CharacterEntity>();
@@ -25,5 +26,16 @@ namespace Characters.Entity
                 GameManager.Instance.SetGameOver();
             }
         }
+
+        private void OnParticleCollision(GameObject other)
+        {
+
+            _playerEntity.ChangeHealth(_playerEntity.GetHealth() - 1.0f);
+            ParticleSystem ps = other.GetComponent<ParticleSystem>();
+            ps.Stop();
+
+        }
+
+
     }
 }
