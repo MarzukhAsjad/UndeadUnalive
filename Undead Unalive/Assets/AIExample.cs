@@ -13,6 +13,7 @@ public class AIExample : MonoBehaviour
 
     public PlayerController pc;
     public PlayerHUDController playerHUDController;
+    public ParticleSystem ps;
 
     public WanderType wanderType = WanderType.Random;
 
@@ -38,12 +39,15 @@ public class AIExample : MonoBehaviour
         renderer = GetComponent<Renderer>();
         animator = GetComponentInChildren<Animator>();
         wanderPoint = RandomWanderPoint();
+        ps = gameObject.GetComponentInChildren<ParticleSystem>();
+        Debug.Log(ps);
     }
     public void Update()
     {
+        
         if (isAware)
         {
-            print("chasing");
+            ps.Play();
             animator.SetBool("Aware", true);
             agent.SetDestination(pc.transform.position);
             if (!isDetecting)
@@ -51,6 +55,7 @@ public class AIExample : MonoBehaviour
                 loseTimer += Time.deltaTime;
                 if (loseTimer >= loseThreshold)
                 {
+                    ps.Stop();
                     isAware = false;
                     loseTimer = 0;
                 }
@@ -59,9 +64,7 @@ public class AIExample : MonoBehaviour
         }
         else
         {
-            print("searching for player");
             Wander();
-            print("Wander");
             animator.SetBool("Aware", false);
             agent.speed = wanderSpeed;
             //renderer.material.color = Color.blue;
@@ -71,15 +74,10 @@ public class AIExample : MonoBehaviour
 
     public void SearchForPlayer()
     {
-        print("hello");
         if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)) < 120f)
         {
-            print(Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)));
-
             if (Vector3.Distance(pc.transform.position, transform.position) < viewDistance)
             {
-                print(Vector3.Distance(pc.transform.position, transform.position));
-                print("distance matches");
                 playerHUDController.EnemyNotifyPlayer(this.gameObject);
                 OnAware();
             }
@@ -96,7 +94,6 @@ public class AIExample : MonoBehaviour
 
     public void OnAware()
     {
-        print("Aware entered");
         isAware = true;
         isDetecting = false;
         loseTimer = 0;
