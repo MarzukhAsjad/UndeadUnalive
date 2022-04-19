@@ -30,7 +30,6 @@ namespace Characters.Entity
         private void OnParticleCollision(GameObject other)
         {
 
-            Debug.Log(other.tag);
             _playerEntity.ChangeHealth(_playerEntity.GetHealth() - 1.0f);
             ParticleSystem ps = other.GetComponent<ParticleSystem>();
             ps.Stop();
