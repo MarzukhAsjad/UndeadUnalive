@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
         {
             var deltaTime = Time.deltaTime;
             if (_isOnGround && InputManager.Instance.InputSprint)
-                deltaTime *= sprintMultiplier;
+                deltaTime *= Mathf.Min(sprintMultiplier, 1.5f);
 
             _cameraAnimationTimer += deltaTime;
 
