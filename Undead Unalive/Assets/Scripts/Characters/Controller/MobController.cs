@@ -30,7 +30,7 @@ namespace Characters.Controller
             player = GameObject.FindGameObjectWithTag("Player"); 
 
             enable = true;
-            shieldRadius = 5; 
+            shieldRadius = 4; 
 
         }
 
@@ -38,7 +38,6 @@ namespace Characters.Controller
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                Debug.Log("Z key pressed"); 
                 //change the value of enable
                 if (enable == true)
                 {
@@ -48,11 +47,19 @@ namespace Characters.Controller
                 }
             }
 
-            //if disabled, mob should return to the safe house
-            if (!enable)
+            /*if (Input.GetKeyDown(KeyCode.X))
             {
                 agent.SetDestination(safeHouse.transform.position);
-                Walk(); 
+                Walk();
+
+            }*/
+
+             //if disabled, mob should just stay at there current position
+            if (!enable)
+            {
+                agent.SetDestination(this.transform.position);
+                rb.velocity = new Vector3(0, 0, 0);
+                Idle();
 
             }
 
@@ -64,9 +71,9 @@ namespace Characters.Controller
                 if (distance > shieldRadius) {
                    
                     agent.SetDestination(player.transform.position);
-                    Walk(); 
+                    Run(); 
 
-                } else { //if distance is less than 1, stop
+                } else { //if distance is less than the shield radius, stop
 
                     agent.SetDestination(this.transform.position);
                     rb.velocity = new Vector3(0, 0, 0); 
@@ -82,7 +89,7 @@ namespace Characters.Controller
         {
             animator.SetBool("Walk", true);
             animator.SetBool("Idle", false);
-            animator.SetBool("SprintJump_ToLeft_R", false);
+            animator.SetBool("SprintJump", false);
         }
 
         //make the survivor run
@@ -90,7 +97,7 @@ namespace Characters.Controller
         {
             animator.SetBool("Walk", false);
             animator.SetBool("Idle", false);
-            animator.SetBool("SprintJump_ToLeft_R", true);
+            animator.SetBool("SprintJump", true);
 
         }
 
@@ -99,7 +106,7 @@ namespace Characters.Controller
         {
             animator.SetBool("Walk", false);
             animator.SetBool("Idle", true);
-            animator.SetBool("SprintJump_ToLeft_R", false);
+            animator.SetBool("SprintJump", false);
 
         }
     }
