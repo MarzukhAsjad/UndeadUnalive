@@ -36,44 +36,55 @@ public class BossController : MonoBehaviour
             Walk();
 
         }
-        else if (distance > 1)
+        else 
         {
             agent.SetDestination(player.transform.position);
             Run();
         }
-        else
-        { //if distance is less than 1, stop
-
-            agent.SetDestination(this.transform.position);
-            rb.velocity = new Vector3(0, 0, 0);
-            Idle();
-        }
 
     }
 
-    //make the boss walk
-    public void Walk()
+    // on touch with player, will kill player
+    private void OnTriggerEnter(Collider collider)
     {
-        animator.SetBool("Monster_anim|Walk", true);
-        animator.SetBool("Monster_anim|Idle_2", false);
-        animator.SetBool("Monster_anim|Run", false); 
+        if(collider.tag == "Player")
+        {
+                agent.SetDestination(this.transform.position);
+                rb.velocity = new Vector3(0, 0, 0);
+                Kill();
+        }
+    }
+    //make the boss walk
+    public void Walk() // set speed to 2
+    {
+        agent.speed = 2.0f;
+        animator.SetBool("walk", true);
+        animator.SetBool("run", false); 
     }
 
     //make the boss run
-    public void Run()
+    public void Run() // set speed to 3.5
     {
-        animator.SetBool("Monster_anim|Walk", false);
-        animator.SetBool("Monster_anim|Idle_2", false);
-        animator.SetBool("Monster_anim|Run", true); 
-
+        agent.speed = 3.5f;
+        animator.SetBool("walk", false);
+        animator.SetBool("run", true); 
     }
 
     //make the boss do nothing, stand idle and EAT
-    public void Idle()
+    public void Idle() // set speed to 0
     {
-        animator.SetBool("Monster_anim|Walk", false);
-        animator.SetBool("Monster_anim|Idle_2", true);
-        animator.SetBool("Monster_anim|Run", false); 
+        agent.speed = 0f;
+        animator.SetBool("walk", false);
+        animator.SetBool("run", false); 
+    }
 
+    public void Kill()
+    {
+        agent.speed = 0f;
+        animator.SetBool("eat", true);
+        animator.SetBool("walk", false);
+        animator.SetBool("run", false);
+        // instantiate blood spill
+        // destroy player game object
     }
 }
