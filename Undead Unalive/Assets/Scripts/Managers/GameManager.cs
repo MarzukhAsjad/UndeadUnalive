@@ -11,16 +11,26 @@ namespace Managers
         public int TargetFPS { private set; get; } = 160;
         private bool _isGameOver = false;
 
+        [SerializeField] private GameObject pauseScreen;
+
         private void Start()
         {
             Application.targetFrameRate = TargetFPS;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                pauseScreen.SetActive(true);
+            }
         }
 
         public void SetGameOver()
         {
             if (!_isGameOver)
             {
-                InputManager.Instance.DisabledAllUserInput();
+                InputManager.Instance.DisableAllUserInput();
                 PlayerHUDController.Instance.DoGameOverScreen();
             }
 
