@@ -9,6 +9,7 @@ TagManager:
   - DecreaseBar
   - Zombie
   - ToxicGas
+  - Vaccine
   layers:
   - Default
   - TransparentFX

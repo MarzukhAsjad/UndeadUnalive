@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ScoringSystem : MonoBehaviour
 {
     public Text vaccineDisplay;
-    public static int vaccineCount;
+    public static int vaccineCount = 5;
     public Text maskDisplay;
     public static int maskCount = 5;
     public Text grenadeDisplay;
