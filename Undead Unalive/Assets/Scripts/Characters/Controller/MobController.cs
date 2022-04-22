@@ -9,6 +9,7 @@ namespace Characters.Controller
     {
         public NavMeshAgent agent;
         public GameObject safeHouse;
+        public GameObject zombie;
         public int shieldRadius;
 
 
@@ -108,6 +109,13 @@ namespace Characters.Controller
             animator.SetBool("Idle", true);
             animator.SetBool("SprintJump", false);
 
+        }
+
+        private void OnParticleCollision(GameObject other)
+        {
+            Instantiate(zombie, transform.position, transform.rotation);
+            Destroy(gameObject);
+            
         }
     }
 }
