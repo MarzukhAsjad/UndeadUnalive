@@ -2809,9 +2809,9 @@ GameObject:
   - component: {fileID: 4481190965260427604}
   - component: {fileID: 95000011610634314}
   - component: {fileID: 8421277013569577952}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Basic_BanditPrefab
-  m_TagString: Untagged
+  m_TagString: Mob
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2922,3 +2922,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 4481190965260427604}
   safeHouse: {fileID: 0}
+  shieldRadius: 0

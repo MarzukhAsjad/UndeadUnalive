@@ -13,7 +13,6 @@ public class KillZombie : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(gameObject);
             Instantiate(BanditPrefab, transform.position, transform.rotation);
-            Debug.Log("Shoot");
         }
     }
 }
