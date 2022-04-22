@@ -10,6 +10,7 @@ namespace Characters.Controller
         public NavMeshAgent agent;
         public GameObject zombie;
         public int shieldRadius;
+        public int detectRadius;
         public Vector3 offset; 
 
         private Camera mainCamera;
@@ -31,6 +32,7 @@ namespace Characters.Controller
 
             enable = true;
             shieldRadius = 0;
+            detectRadius = 10;
             offset = new Vector3(0, 0, 5); 
 
         }
@@ -67,7 +69,17 @@ namespace Characters.Controller
                 desiredPosition = player.transform.position + offset;
 
                 agent.SetDestination(desiredPosition);
-                Run();
+                if (distance > detectRadius) // if the mob is > detectRadius away from player, they'll run
+                {
+                    agent.speed = 3.5f;
+                    Run();
+                }
+                else // otherwise, they'll walk
+                {
+                    agent.speed = 2;
+                    Walk();
+                }
+                
 
             }
        
