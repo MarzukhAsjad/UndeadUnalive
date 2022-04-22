@@ -9,7 +9,8 @@ namespace Characters.Controller
     {
         public NavMeshAgent agent;
         public GameObject safeHouse;
-        public int shieldRadius;
+        public int shieldRadius; // when should the mob shift to walking
+        public int detectRadius; // when should the mob shift to running
 
 
         private GameObject player;
@@ -27,10 +28,12 @@ namespace Characters.Controller
             agent = this.GetComponent<NavMeshAgent>();
             rb = this.GetComponent<Rigidbody>();
             animator = this.GetComponent<Animator>();
-            player = GameObject.FindGameObjectWithTag("Player"); 
+            player = GameObject.FindGameObjectWithTag("Player");
+
+            shieldRadius = 4;
+            detectRadius = 10;
 
             enable = true;
-            shieldRadius = 4; 
 
         }
 
@@ -68,12 +71,20 @@ namespace Characters.Controller
 
                 distance = Vector3.Distance(player.transform.position, this.transform.position); 
                 
-                if (distance > shieldRadius) {
+                if (distance > detectRadius) {
                    
                     agent.SetDestination(player.transform.position);
+                    agent.speed = 3.5f;
                     Run(); 
 
-                } else { //if distance is less than the shield radius, stop
+                } 
+                else if (distance > shieldRadius)
+                {
+                    agent.SetDestination(player.transform.position);
+                    agent.speed = 2.0f;
+                    Walk();
+                }
+                else { //if distance is less than the shield radius, stop
 
                     agent.SetDestination(this.transform.position);
                     rb.velocity = new Vector3(0, 0, 0); 
