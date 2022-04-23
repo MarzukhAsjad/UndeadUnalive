@@ -8,29 +8,32 @@ namespace Characters.Controller
     public class MobController : MonoBehaviour
     {
         public NavMeshAgent agent;
-        public GameObject safeHouse;
+        public GameObject zombie;
         public int shieldRadius;
+        public int detectRadius;
+        public Vector3 offset; 
 
-
+        private Camera mainCamera;
         private GameObject player;
         private Rigidbody rb;
         private bool enable;
         private float distance;
         private Animator animator;
-        private Vector3 pos = new Vector3(204.29f, 0, 296.37f);
+        private Vector3 desiredPosition; 
         
         public void Start()
-        {
-            safeHouse = new GameObject();
-            safeHouse.transform.position = pos; 
+        {          
 
             agent = this.GetComponent<NavMeshAgent>();
             rb = this.GetComponent<Rigidbody>();
             animator = this.GetComponent<Animator>();
-            player = GameObject.FindGameObjectWithTag("Player"); 
+            player = GameObject.FindGameObjectWithTag("Player");
+            mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>(); 
 
             enable = true;
-            shieldRadius = 4; 
+            shieldRadius = 0;
+            detectRadius = 10;
+            offset = new Vector3(0, 0, 5); 
 
         }
 
@@ -47,12 +50,8 @@ namespace Characters.Controller
                 }
             }
 
-            /*if (Input.GetKeyDown(KeyCode.X))
-            {
-                agent.SetDestination(safeHouse.transform.position);
-                Walk();
-
-            }*/
+            //rotating the offset
+            offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X"), Vector3.up) * offset; 
 
              //if disabled, mob should just stay at there current position
             if (!enable)
@@ -66,19 +65,21 @@ namespace Characters.Controller
             else //mob should follow player
             { 
 
-                distance = Vector3.Distance(player.transform.position, this.transform.position); 
-                
-                if (distance > shieldRadius) {
-                   
-                    agent.SetDestination(player.transform.position);
-                    Run(); 
+                distance = Vector3.Distance(player.transform.position, this.transform.position);
+                desiredPosition = player.transform.position + offset;
 
-                } else { //if distance is less than the shield radius, stop
-
-                    agent.SetDestination(this.transform.position);
-                    rb.velocity = new Vector3(0, 0, 0); 
-                    Idle(); 
+                agent.SetDestination(desiredPosition);
+                if (distance > detectRadius) // if the mob is > detectRadius away from player, they'll run
+                {
+                    agent.speed = 3.5f;
+                    Run();
                 }
+                else // otherwise, they'll walk
+                {
+                    agent.speed = 2;
+                    Walk();
+                }
+                
 
             }
        
@@ -109,15 +110,12 @@ namespace Characters.Controller
             animator.SetBool("SprintJump", false);
 
         }
-<<<<<<< Updated upstream
-=======
 
         private void OnParticleCollision(GameObject other)
         {
-            Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
+            Instantiate(zombie, transform.position, transform.rotation);
             Destroy(gameObject);
             
         }
->>>>>>> Stashed changes
     }
 }

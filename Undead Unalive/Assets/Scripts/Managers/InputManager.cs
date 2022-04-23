@@ -48,29 +48,51 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
         }
     }
 
-    public void DisabledAxisInput()
+    public void DisableAxisInput()
     {
         _disabledAxisInput = true;
         InputMouseXAxis = InputMouseYAxis = InputXAxisRaw = InputYAxisRaw = 0;
     }
     
-    public void DisabledJumpInput()
+    public void DisableJumpInput()
     {
         _disabledJump = true;
         InputJump = false;
     }
     
-    public void DisabledKeyInput()
+    public void DisableKeyInput()
     {
         _disabledKeyInput = true;
         KeyInteract = false;
     }
     
-    public void DisabledAllUserInput()
+    public void EnableAxisInput()
     {
-        DisabledAxisInput();
-        DisabledJumpInput();
-        DisabledKeyInput();
+        _disabledAxisInput = false;
+    }
+    
+    public void EnableJumpInput()
+    {
+        _disabledJump = false;
+    }
+    
+    public void EnableKeyInput()
+    {
+        _disabledKeyInput = false;
+    }
+    
+    public void DisableAllUserInput()
+    {
+        DisableAxisInput();
+        DisableJumpInput();
+        DisableKeyInput();
+    }
+    
+    public void EnableAllUserInput()
+    {
+        EnableAxisInput();
+        EnableJumpInput();
+        EnableKeyInput();
     }
     
     public static void LockMouse()

@@ -9,11 +9,13 @@ TagManager:
   - DecreaseBar
   - Zombie
   - ToxicGas
+  - Vaccine
+  - Mob
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Mob
   - Water
   - UI
   - Player
