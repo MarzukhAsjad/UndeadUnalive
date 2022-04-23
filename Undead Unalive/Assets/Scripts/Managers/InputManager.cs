@@ -97,11 +97,13 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
     
     public static void LockMouse()
     {
+        print("Lock");
         Cursor.lockState = CursorLockMode.Locked;
     }
     
     public static void ReleaseMouse()
     {
+        print("Release");
         Cursor.lockState = CursorLockMode.None;
     }
 }

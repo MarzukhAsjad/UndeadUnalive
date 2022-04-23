@@ -13,6 +13,8 @@ namespace Managers
 
         [SerializeField] private GameObject pauseScreen;
 
+        public bool isPaused = false;
+
         private void Start()
         {
             Application.targetFrameRate = TargetFPS;
@@ -23,6 +25,7 @@ namespace Managers
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 pauseScreen.SetActive(true);
+                isPaused = true;
             }
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 public class GrenadeThrower : MonoBehaviour
@@ -11,6 +12,9 @@ public class GrenadeThrower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // disable throwing when game paused
+        if (GameManager.Instance.isPaused) return;
+        
         if (Input.GetKey(KeyCode.G) && ScoringSystem.grenadeCount>=1)
         {
             Debug.Log("BOOM");
