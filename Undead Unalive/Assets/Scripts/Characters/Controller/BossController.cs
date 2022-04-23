@@ -8,6 +8,7 @@ public class BossController : MonoBehaviour
 
     public NavMeshAgent agent; // navmesh 
     public int detectRadius; // zone for fast running
+    public int health; // boss health
 
     private GameObject player; // player reference
     private Rigidbody rb; // boss's rigidbody
@@ -22,6 +23,7 @@ public class BossController : MonoBehaviour
         animator = this.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         detectRadius = 20;
+        health = 10;
     }
 
     // Update is called once per frame
@@ -44,16 +46,28 @@ public class BossController : MonoBehaviour
 
     }
 
-    // on touch with player, will kill player
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.tag == "Player")
+        if(collider.tag == "Player") // to detect player
         {
                 agent.SetDestination(this.transform.position);
                 rb.velocity = new Vector3(0, 0, 0);
                 Kill();
         }
+
+        if (collider.tag == "Vaccine") // to detect vaccine
+        {
+            Destroy(collider.gameObject);
+            health -= 1;
+
+        }
+
+        if (collider.tag == "Grenade") // to detect grenade
+        {
+            health -= 2;
+        }
     }
+
     //make the boss walk
     public void Walk() // set speed to 2
     {
@@ -84,7 +98,8 @@ public class BossController : MonoBehaviour
         animator.SetBool("eat", true);
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
-        // instantiate blood spill
+        // instantiate blood spill\
+
         // destroy player game object
     }
 }
