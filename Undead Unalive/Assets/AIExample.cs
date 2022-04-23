@@ -65,7 +65,15 @@ public class AIExample : MonoBehaviour
         }
         else
         {
-            source.Play();
+            if (Time.realtimeSinceStartup < 10)
+            {
+                source.volume = 0.0f;
+            }
+            else
+            {
+                source.volume = 1.0f;
+                source.Play();
+            }
             playerHUDController.EnemyNotifyPlayer(gameObject);
             Wander();
             animator.SetBool("Aware", false);
