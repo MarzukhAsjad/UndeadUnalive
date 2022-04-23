@@ -32,8 +32,7 @@ public class AIExample : MonoBehaviour
     private int waypointIndex = 0;
     private Animator animator;
     private float loseTimer = 0;
-    public AudioSource angryZombie;
-    public AudioSource wanderZombie;
+    public AudioSource source;
 
     public void Start()
     {
@@ -42,6 +41,7 @@ public class AIExample : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         wanderPoint = RandomWanderPoint();
         ps = gameObject.GetComponentInChildren<ParticleSystem>();
+        source = GetComponent<AudioSource>();
     }
     public void Update()
     {
@@ -65,9 +65,9 @@ public class AIExample : MonoBehaviour
         }
         else
         {
+            source.Play();
             playerHUDController.EnemyNotifyPlayer(gameObject);
             Wander();
-            wanderZombie.Play();
             animator.SetBool("Aware", false);
             agent.speed = wanderSpeed;
             //renderer.material.color = Color.blue;
@@ -82,7 +82,6 @@ public class AIExample : MonoBehaviour
             if (Vector3.Distance(pc.transform.position, transform.position) < viewDistance)
             {
                 OnAware();
-                angryZombie.Play();
             }
             else
             {

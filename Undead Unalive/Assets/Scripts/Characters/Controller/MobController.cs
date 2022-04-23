@@ -109,5 +109,15 @@ namespace Characters.Controller
             animator.SetBool("SprintJump", false);
 
         }
+<<<<<<< Updated upstream
+=======
+
+        private void OnParticleCollision(GameObject other)
+        {
+            Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
+            Destroy(gameObject);
+            
+        }
+>>>>>>> Stashed changes
     }
 }
