@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13471615, g: 0.14837316, b: 0.16128165, a: 1}
+  m_IndirectSpecularColor: {r: 0.13513187, g: 0.14836773, b: 0.1614475, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -20340,7 +20340,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -21875,9 +21875,9 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 6.4
-  m_Range: 10
-  m_SpotAngle: 54
+  m_Intensity: 7
+  m_Range: 20
+  m_SpotAngle: 70.944
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
@@ -24036,6 +24036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseScreen: {fileID: 1964797796}
+  isPaused: 0
 --- !u!4 &821152163
 Transform:
   m_ObjectHideFlags: 0
@@ -53912,6 +53913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1710895894}
   detectRadius: 20
+  health: 0
 --- !u!1001 &1714385485
 PrefabInstance:
   m_ObjectHideFlags: 0
