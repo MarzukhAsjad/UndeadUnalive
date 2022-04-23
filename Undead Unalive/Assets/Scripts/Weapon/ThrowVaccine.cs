@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 public class ThrowVaccine : MonoBehaviour
@@ -27,13 +28,15 @@ public class ThrowVaccine : MonoBehaviour
 
     private void Awake()
     {
-        
         readyToShoot = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // disable shoot when game paused
+        if (GameManager.Instance.isPaused) return;
+
         bulletsLeft = ScoringSystem.vaccineCount;
         MyInput();
     }
@@ -43,7 +46,7 @@ public class ThrowVaccine : MonoBehaviour
         if (allowButtonHold) shooting = Input.GetKey(KeyCode.Mouse0);
         else shooting = Input.GetKeyDown(KeyCode.Mouse0);
 
-        if(readyToShoot && shooting && bulletsLeft > 0)
+        if (readyToShoot && shooting && bulletsLeft > 0)
         {
             Shoot();
         }
@@ -57,7 +60,7 @@ public class ThrowVaccine : MonoBehaviour
         RaycastHit hit;
 
         Vector3 targetPoint;
-        if(Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit))
         {
             targetPoint = hit.point;
         }
@@ -72,14 +75,15 @@ public class ThrowVaccine : MonoBehaviour
 
         currentBullet.transform.forward = directionWithoutSpread.normalized;
 
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+        currentBullet.GetComponent<Rigidbody>()
+            .AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
 
         if (muzzleFlash != null)
         {
             Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
         }
 
-        ScoringSystem.vaccineCount-=1;
+        ScoringSystem.vaccineCount -= 1;
 
         if (allowInvoke)
         {
