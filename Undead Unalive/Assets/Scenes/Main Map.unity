@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13471615, g: 0.14837316, b: 0.16128165, a: 1}
+  m_IndirectSpecularColor: {r: 0.13513187, g: 0.14836773, b: 0.1614475, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9801,7 +9801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vaccine: {fileID: 6107024051635505007, guid: 13715e3b44ef78440853aea768346ca6, type: 3}
   grenade: {fileID: 5927266515612341450, guid: ce43c32d67885254f98cacde1b928a7f, type: 3}
-  shootForce: 10
+  shootForce: 30
   upwardForce: 0
   timeBetweenShooting: 0.1
   spread: 0
@@ -9823,7 +9823,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c3c30eb2b4232d040aefceac20296bcd, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 2d8193e49376ad843a50c55bf0cf1b7b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
