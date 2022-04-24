@@ -25,6 +25,7 @@ public class Grenade : MonoBehaviour
         rend.enabled = true;
         explosionSound = GetComponent<AudioSource>();
 
+
     }
 
     // Update is called once per frame
@@ -51,6 +52,12 @@ public class Grenade : MonoBehaviour
             if (nearbyObject.tag == "Zombie")
             {
                 Destroy(nearbyObject.gameObject);
+            }
+            
+            if (nearbyObject.tag == "Boss")
+            {
+                nearbyObject.gameObject.GetComponent<BossController>().health -= 2;
+                Debug.Log(nearbyObject.gameObject.GetComponent<BossController>().health);
             }
         }
         // Get nearby object and damage them
