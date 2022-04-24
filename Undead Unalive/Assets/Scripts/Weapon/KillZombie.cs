@@ -11,7 +11,7 @@ public class KillZombie : MonoBehaviour
     {
         if (other.CompareTag("Vaccine"))
         {
-            ScoreManager.Instance.AddDeltaScore(10);
+            ScoreManager.Instance.AddDeltaScore(10, "kill zombie");
             Destroy(other.gameObject);
             Destroy(gameObject);
             Instantiate(BanditPrefab, transform.position, transform.rotation);

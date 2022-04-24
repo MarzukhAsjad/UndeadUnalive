@@ -32,6 +32,8 @@ namespace Characters.Controller
             shieldRadius = 4;
             detectRadius = 10;
             offset = new Vector3(0, 0, 5);
+            
+            ScoreManager.Instance.RegisterNewMob(gameObject);
         }
 
         public void Update()

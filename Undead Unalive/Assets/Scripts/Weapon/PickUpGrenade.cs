@@ -10,7 +10,7 @@ public class PickUpGrenade : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            ScoreManager.Instance.AddDeltaScore(20);
+            ScoreManager.Instance.AddDeltaScore(20, "pickup");
             ScoringSystem.grenadeCount += 1;
             gameObject.SetActive(false);
         }

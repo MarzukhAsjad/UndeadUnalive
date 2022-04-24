@@ -10,7 +10,7 @@ public class PickupMask : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        ScoreManager.Instance.AddDeltaScore(20);
+        ScoreManager.Instance.AddDeltaScore(20, "pickup");
         ScoringSystem.maskCount += 1;
         gameObject.SetActive(false);
     }
