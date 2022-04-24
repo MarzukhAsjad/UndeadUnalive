@@ -98,8 +98,11 @@ public class AIExample : MonoBehaviour
     public void OnAware()
     {
         playerHUDController.EnemyNotifyPlayer(gameObject);
+        if (isAware == false)
+        {
+            source.Play();
+        }
         isAware = true;
-        source.Play();
         isDetecting = false;
         loseTimer = 0;
     }
