@@ -49,6 +49,10 @@ public class BossController : MonoBehaviour
             Run();
         }
 
+        if (health < 1)
+        {
+            Death();
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -68,10 +72,7 @@ public class BossController : MonoBehaviour
 
         }
 
-        if (collider.tag == "Grenade") // to detect grenade
-        {
-            health -= 2;
-        }
+        
     }
 
     //make the boss walk
@@ -109,8 +110,24 @@ public class BossController : MonoBehaviour
         // destroy player game object
     }
 
+    public void Death()
+    {
+        agent.speed = 0f;
+        animator.SetBool("death", true);
+        animator.SetBool("walk", false);
+        animator.SetBool("run", false);
+        animator.SetBool("eat", false);
+        StartCoroutine(DelayDeactivate());
+    }
     public void changeHealth()
     {
         slider.value = .1f * (float)health;
+    }
+
+    IEnumerator DelayDeactivate()
+    {
+        yield return new WaitForSeconds(3.0f);
+        this.gameObject.SetActive(false);
+        bossHealth.SetActive(false);
     }
 }

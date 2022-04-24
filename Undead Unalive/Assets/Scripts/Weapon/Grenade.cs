@@ -57,7 +57,7 @@ public class Grenade : MonoBehaviour
             if (nearbyObject.tag == "Boss")
             {
                 nearbyObject.gameObject.GetComponent<BossController>().health -= 2;
-                Debug.Log(nearbyObject.gameObject.GetComponent<BossController>().health);
+                nearbyObject.gameObject.GetComponent<BossController>().changeHealth();
             }
         }
         // Get nearby object and damage them
