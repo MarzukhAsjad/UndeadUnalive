@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 public class Grenade : MonoBehaviour
@@ -51,6 +52,7 @@ public class Grenade : MonoBehaviour
         {
             if (nearbyObject.tag == "Zombie")
             {
+                ScoreManager.Instance.AddDeltaScore(10);
                 Destroy(nearbyObject.gameObject);
             }
             

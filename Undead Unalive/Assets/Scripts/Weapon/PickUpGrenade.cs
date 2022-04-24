@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 public class PickUpGrenade : MonoBehaviour
@@ -9,6 +10,7 @@ public class PickUpGrenade : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            ScoreManager.Instance.AddDeltaScore(20);
             ScoringSystem.grenadeCount += 1;
             gameObject.SetActive(false);
         }
