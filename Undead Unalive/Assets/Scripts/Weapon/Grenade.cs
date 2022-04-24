@@ -12,6 +12,8 @@ public class Grenade : MonoBehaviour
 
     bool hasExploded = false;
 
+    public Renderer rend;
+
     public GameObject explosionEffect;
     public AudioSource explosionSound;
 
@@ -19,6 +21,8 @@ public class Grenade : MonoBehaviour
     void Start()
     {
         countdown = delay;
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
         explosionSound = GetComponent<AudioSource>();
 
     }
@@ -55,6 +59,8 @@ public class Grenade : MonoBehaviour
 
         explosionSound.Play();
 
-        Destroy(gameObject);
+        rend.enabled = false;
+
+        Destroy(gameObject, explosionSound.clip.length);
     }
 }
