@@ -10,7 +10,7 @@ public class ScoringSystem : MonoBehaviour
     public Text maskDisplay;
     public static int maskCount = 5;
     public Text grenadeDisplay;
-    public static int grenadeCount;
+    public static int grenadeCount = 5;
 
 
     // Update is called once per frame

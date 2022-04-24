@@ -18,6 +18,7 @@ namespace Characters.Controller
         private Animator animator;
         private Camera mainCamera;
         private Vector3 desiredPosition;
+        private float creationTime = 5.0f;
 
         public void Start()
         {
@@ -34,6 +35,9 @@ namespace Characters.Controller
 
         public void Update()
         {
+
+            creationTime -= Time.deltaTime;
+
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 //change the value of enable
@@ -106,8 +110,12 @@ namespace Characters.Controller
 
         private void OnParticleCollision(GameObject other)
         {
-            Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
-            Destroy(gameObject);
+            Debug.Log(other.tag);
+            if (creationTime <= 0.0f && other.CompareTag("ToxicGas"))
+            {
+                Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
+                Destroy(gameObject);
+            }
         }
     }
 }

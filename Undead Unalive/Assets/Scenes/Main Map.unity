@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13513187, g: 0.14836773, b: 0.1614475, a: 1}
+  m_IndirectSpecularColor: {r: 0.13471615, g: 0.14837316, b: 0.16128165, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5798,13 +5798,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vaccine: {fileID: 6107024051635505007, guid: 13715e3b44ef78440853aea768346ca6, type: 3}
-  shootForce: 50
+  shootForce: 10
   upwardForce: 0
   timeBetweenShooting: 0.1
   spread: 0
   timeBetweenShots: 0
   bulletsPerTap: 1
   allowButtonHold: 1
+  bulletsLeft: 0
+  shooting: 0
+  readyToShoot: 0
   fpsCam: {fileID: 1660808176}
   attackPoint: {fileID: 1505284590}
   muzzleFlash: {fileID: 0}
