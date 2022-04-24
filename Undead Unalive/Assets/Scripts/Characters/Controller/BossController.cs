@@ -11,6 +11,7 @@ public class BossController : MonoBehaviour
     public int detectRadius; // zone for fast running
     public int health; // boss health
     public GameObject bossHealth;
+    public GameObject bloodSpill;
 
     private GameObject player; // player reference
     private Rigidbody rb; // boss's rigidbody
@@ -57,12 +58,6 @@ public class BossController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.tag == "Player") // to detect player
-        {
-                agent.SetDestination(this.transform.position);
-                rb.velocity = new Vector3(0, 0, 0);
-                Kill();
-        }
 
         if (collider.tag == "Vaccine") // to detect vaccine
         {
@@ -71,7 +66,12 @@ public class BossController : MonoBehaviour
             changeHealth();
 
         }
-
+        if (collider.tag == "Player") // to detect player
+        {
+            agent.SetDestination(this.transform.position);
+            Debug.Log("Player hit");
+            Kill();
+        }
         
     }
 
@@ -102,11 +102,10 @@ public class BossController : MonoBehaviour
     public void Kill()
     {
         agent.speed = 0f;
-        animator.SetBool("eat", true);
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
-        // instantiate blood spill\
-
+        // instantiate blood spill
+        Instantiate(bloodSpill, transform.position, transform.rotation);
         // destroy player game object
     }
 
