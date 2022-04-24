@@ -18,6 +18,7 @@ namespace Characters.Controller
         private Animator animator;
         private Camera mainCamera;
         private Vector3 desiredPosition;
+        private float creationTime = 5.0f;
 
         public void Start()
         {
@@ -27,13 +28,16 @@ namespace Characters.Controller
             player = GameObject.FindGameObjectWithTag("Player");
             mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
             enable = true;
-            shieldRadius = 0;
+            shieldRadius = 4;
             detectRadius = 10;
             offset = new Vector3(0, 0, 5);
         }
 
         public void Update()
         {
+
+            creationTime -= Time.deltaTime;
+
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 //change the value of enable
@@ -70,10 +74,17 @@ namespace Characters.Controller
                     agent.speed = 3.5f;
                     Run();
                 }
-                else //otherwise they'll walk
+                else if (distance > shieldRadius) //otherwise they'll walk
                 {
                     agent.speed = 2;
                     Walk();
+                }
+                else // otherwise they'll stand
+                {
+                    agent.SetDestination(this.transform.position);
+                    agent.speed = 0;
+                    rb.velocity = new Vector3(0, 0, 0);
+                    Idle();
                 }
             }
 
@@ -106,8 +117,12 @@ namespace Characters.Controller
 
         private void OnParticleCollision(GameObject other)
         {
-            Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
-            Destroy(gameObject);
+            Debug.Log(other.tag);
+            if (creationTime <= 0.0f && other.CompareTag("ToxicGas"))
+            {
+                Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
+                Destroy(gameObject);
+            }
         }
     }
 }

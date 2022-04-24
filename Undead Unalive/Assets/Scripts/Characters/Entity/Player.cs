@@ -36,7 +36,11 @@ namespace Characters.Entity
 
         private void OnParticleCollision(GameObject other)
         {
-            PlayerDamage();
+            if (other.CompareTag("ToxicGas"))
+            {
+                PlayerDamage();
+            }
+            
         }
 
         private void PlayerDamage()

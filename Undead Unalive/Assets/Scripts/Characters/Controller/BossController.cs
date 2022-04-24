@@ -2,26 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
 
     public NavMeshAgent agent; // navmesh 
     public int detectRadius; // zone for fast running
+    public int health; // boss health
+    public GameObject bossHealth;
 
     private GameObject player; // player reference
     private Rigidbody rb; // boss's rigidbody
     private float distance; // distance between boss and player
     private Animator animator; // boss's animator
+    private Slider slider;
 
     // Start is called before the first frame update
     void Start()
     {
+        bossHealth.SetActive(true);
         agent = this.GetComponent<NavMeshAgent>();
         rb = this.GetComponent<Rigidbody>();
         animator = this.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
+        slider = bossHealth.GetComponent<Slider>();
         detectRadius = 20;
+        health = 10;
     }
 
     // Update is called once per frame
@@ -44,16 +51,29 @@ public class BossController : MonoBehaviour
 
     }
 
-    // on touch with player, will kill player
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.tag == "Player")
+        if(collider.tag == "Player") // to detect player
         {
                 agent.SetDestination(this.transform.position);
                 rb.velocity = new Vector3(0, 0, 0);
                 Kill();
         }
+
+        if (collider.tag == "Vaccine") // to detect vaccine
+        {
+            Destroy(collider.gameObject);
+            health -= 1;
+            changeHealth();
+
+        }
+
+        if (collider.tag == "Grenade") // to detect grenade
+        {
+            health -= 2;
+        }
     }
+
     //make the boss walk
     public void Walk() // set speed to 2
     {
@@ -84,7 +104,13 @@ public class BossController : MonoBehaviour
         animator.SetBool("eat", true);
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
-        // instantiate blood spill
+        // instantiate blood spill\
+
         // destroy player game object
+    }
+
+    public void changeHealth()
+    {
+        slider.value = .1f * (float)health;
     }
 }
