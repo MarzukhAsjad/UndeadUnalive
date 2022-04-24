@@ -9,6 +9,7 @@ namespace Managers
     public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         public int TargetFPS { private set; get; } = 160;
+        public Light mylight;
         private bool _isGameOver = false;
 
         [SerializeField] private GameObject pauseScreen;
@@ -17,6 +18,7 @@ namespace Managers
 
         private void Start()
         {
+            mylight.intensity = 0.1f;
             Application.targetFrameRate = TargetFPS;
         }
 
