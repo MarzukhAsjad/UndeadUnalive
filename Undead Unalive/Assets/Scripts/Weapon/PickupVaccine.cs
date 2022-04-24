@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class PickupVaccine : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            ScoreManager.Instance.AddDeltaScore(20, "pickup");
             ScoringSystem.vaccineCount += 1;
             gameObject.SetActive(false);
         }

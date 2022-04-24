@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-
     public float delay = 2f;
     public float radius = 5f;
 
@@ -12,18 +12,25 @@ public class Grenade : MonoBehaviour
 
     bool hasExploded = false;
 
+    public Renderer rend;
+
     public GameObject explosionEffect;
+    public AudioSource explosionSound;
+
     // Start is called before the first frame update
     void Start()
     {
         countdown = delay;
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
+        explosionSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
         countdown -= Time.deltaTime;
-        if(countdown <=0f && !hasExploded)
+        if (countdown <= 0f && !hasExploded)
         {
             Debug.Log("Boom");
             Explode();
@@ -36,19 +43,31 @@ public class Grenade : MonoBehaviour
         Instantiate(explosionEffect, transform.position, transform.rotation);
         // Show explosion effect
 
-        Collider[] colliders =  Physics.OverlapSphere(transform.position, radius);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
         foreach (Collider nearbyObject in colliders)
         {
             if (nearbyObject.tag == "Zombie")
             {
+                ScoreManager.Instance.AddDeltaScore(10, "grenade damage");
                 Destroy(nearbyObject.gameObject);
+            }
+
+            if (nearbyObject.tag == "Boss")
+            {
+                ScoreManager.Instance.AddDeltaScore(10, "grenade damage");
+                nearbyObject.gameObject.GetComponent<BossController>().health -= 2;
+                nearbyObject.gameObject.GetComponent<BossController>().changeHealth();
             }
         }
         // Get nearby object and damage them
 
         // Remove grenade
 
-        Destroy(gameObject);
+        explosionSound.Play();
+
+        rend.enabled = false;
+
+        Destroy(gameObject, explosionSound.clip.length);
     }
 }

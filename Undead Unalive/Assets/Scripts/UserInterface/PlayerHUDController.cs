@@ -63,6 +63,8 @@ namespace UserInterface
         {
             _enemyIndicatorList.ForEach((k, d) =>
             {
+                if(((GameObject)k) == null) return;
+                
                 FindScreenEdgeLocationForWorldLocation(((GameObject)k).transform.position, 0.9f, out var outScreenPosition, out var outRotationAngleDegrees, out var bIsOnScreen);
 
                 ((RectTransform)d).gameObject.SetActive(!bIsOnScreen);

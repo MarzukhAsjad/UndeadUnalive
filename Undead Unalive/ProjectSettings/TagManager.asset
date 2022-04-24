@@ -11,6 +11,7 @@ TagManager:
   - ToxicGas
   - Vaccine
   - Mob
+  - Boss
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
+using Characters.Entity;
+using Managers;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class BossController : MonoBehaviour
     public int detectRadius; // zone for fast running
     public int health; // boss health
     public GameObject bossHealth;
+    public GameObject bloodSpill;
 
     private GameObject player; // player reference
     private Rigidbody rb; // boss's rigidbody
@@ -49,16 +51,14 @@ public class BossController : MonoBehaviour
             Run();
         }
 
+        if (health < 1)
+        {
+            Death();
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.tag == "Player") // to detect player
-        {
-                agent.SetDestination(this.transform.position);
-                rb.velocity = new Vector3(0, 0, 0);
-                Kill();
-        }
 
         if (collider.tag == "Vaccine") // to detect vaccine
         {
@@ -67,11 +67,13 @@ public class BossController : MonoBehaviour
             changeHealth();
 
         }
-
-        if (collider.tag == "Grenade") // to detect grenade
+        if (collider.tag == "Player") // to detect player
         {
-            health -= 2;
+            agent.SetDestination(this.transform.position);
+            Debug.Log("Player hit");
+            Kill();
         }
+        
     }
 
     //make the boss walk
@@ -101,16 +103,35 @@ public class BossController : MonoBehaviour
     public void Kill()
     {
         agent.speed = 0f;
-        animator.SetBool("eat", true);
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
+        // instantiate blood spill
+        Instantiate(bloodSpill, transform.position, transform.rotation);
+        // destroy player game object
         // instantiate blood spill\
 
-        // destroy player game object
+        player.GetComponent<CharacterEntity>().ChangeHealth(0);
     }
 
+    public void Death()
+    {
+        agent.speed = 0f;
+        animator.SetBool("death", true);
+        animator.SetBool("walk", false);
+        animator.SetBool("run", false);
+        animator.SetBool("eat", false);
+        StartCoroutine(DelayDeactivate());
+    }
     public void changeHealth()
     {
         slider.value = .1f * (float)health;
+    }
+
+    IEnumerator DelayDeactivate()
+    {
+        ScoreManager.Instance.AddDeltaScore(100, "boss death");
+        yield return new WaitForSeconds(3.0f);
+        this.gameObject.SetActive(false);
+        bossHealth.SetActive(false);
     }
 }

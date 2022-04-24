@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine.AI;
 
 namespace Characters.Controller
@@ -31,6 +32,8 @@ namespace Characters.Controller
             shieldRadius = 4;
             detectRadius = 10;
             offset = new Vector3(0, 0, 5);
+            
+            ScoreManager.Instance.RegisterNewMob(gameObject);
         }
 
         public void Update()
@@ -94,7 +97,6 @@ namespace Characters.Controller
         public void Walk()
         {
             animator.SetBool("Walk", true);
-            animator.SetBool("Idle", false);
             animator.SetBool("SprintJump", false);
         }
 
@@ -102,7 +104,6 @@ namespace Characters.Controller
         public void Run()
         {
             animator.SetBool("Walk", false);
-            animator.SetBool("Idle", false);
             animator.SetBool("SprintJump", true);
         }
 
@@ -110,7 +111,6 @@ namespace Characters.Controller
         public void Idle()
         {
             animator.SetBool("Walk", false);
-            animator.SetBool("Idle", true);
             animator.SetBool("SprintJump", false);
 
         }
@@ -120,6 +120,7 @@ namespace Characters.Controller
             Debug.Log(other.tag);
             if (creationTime <= 0.0f && other.CompareTag("ToxicGas"))
             {
+                ScoreManager.Instance.AddDeltaScore(-5, "mob to zombie");
                 Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
                 Destroy(gameObject);
             }
