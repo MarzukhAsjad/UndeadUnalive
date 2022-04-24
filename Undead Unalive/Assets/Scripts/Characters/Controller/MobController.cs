@@ -28,7 +28,7 @@ namespace Characters.Controller
             player = GameObject.FindGameObjectWithTag("Player");
             mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
             enable = true;
-            shieldRadius = 0;
+            shieldRadius = 4;
             detectRadius = 10;
             offset = new Vector3(0, 0, 5);
         }
@@ -74,10 +74,17 @@ namespace Characters.Controller
                     agent.speed = 3.5f;
                     Run();
                 }
-                else //otherwise they'll walk
+                else if (distance > shieldRadius) //otherwise they'll walk
                 {
                     agent.speed = 2;
                     Walk();
+                }
+                else // otherwise they'll stand
+                {
+                    agent.SetDestination(this.transform.position);
+                    agent.speed = 0;
+                    rb.velocity = new Vector3(0, 0, 0);
+                    Idle();
                 }
             }
 
