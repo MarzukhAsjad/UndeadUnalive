@@ -13,10 +13,14 @@ public class Grenade : MonoBehaviour
     bool hasExploded = false;
 
     public GameObject explosionEffect;
+    public AudioSource explosionSound;
+
     // Start is called before the first frame update
     void Start()
     {
         countdown = delay;
+        explosionSound = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -48,6 +52,8 @@ public class Grenade : MonoBehaviour
         // Get nearby object and damage them
 
         // Remove grenade
+
+        explosionSound.Play();
 
         Destroy(gameObject);
     }
