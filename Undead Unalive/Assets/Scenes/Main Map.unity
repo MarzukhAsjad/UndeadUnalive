@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.13513187, g: 0.14836529, b: 0.1614475, a: 1}
+  m_IndirectSpecularColor: {r: 0.13471615, g: 0.14837316, b: 0.16128165, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9800,7 +9800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vaccine: {fileID: 6107024051635505007, guid: 13715e3b44ef78440853aea768346ca6, type: 3}
-  grenade: {fileID: 0}
+  grenade: {fileID: 5927266515612341450, guid: ce43c32d67885254f98cacde1b928a7f, type: 3}
   shootForce: 10
   upwardForce: 0
   timeBetweenShooting: 0.1
@@ -25143,7 +25143,6 @@ GameObject:
   - component: {fileID: 675571573}
   - component: {fileID: 675571572}
   - component: {fileID: 675571571}
-  - component: {fileID: 675571576}
   - component: {fileID: 675571577}
   m_Layer: 6
   m_Name: Player
@@ -25239,20 +25238,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 182.01, z: 0}
---- !u!114 &675571576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675571570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec4e041d74628e24daa46eef971c8d7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  throwForce: 20
-  grenade: {fileID: 5927266515612341450, guid: ce43c32d67885254f98cacde1b928a7f, type: 3}
 --- !u!82 &675571577
 AudioSource:
   m_ObjectHideFlags: 0
