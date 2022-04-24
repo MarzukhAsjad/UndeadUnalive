@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine.AI;
 
 namespace Characters.Controller
@@ -120,6 +121,7 @@ namespace Characters.Controller
             Debug.Log(other.tag);
             if (creationTime <= 0.0f && other.CompareTag("ToxicGas"))
             {
+                ScoreManager.Instance.AddDeltaScore(-5, "mob to zombie");
                 Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
                 Destroy(gameObject);
             }

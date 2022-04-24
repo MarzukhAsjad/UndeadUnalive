@@ -7,7 +7,6 @@ namespace Characters.Entity
 {
     public class Player : MonoBehaviourSingleton<Player>
     {
-
         private CharacterEntity _playerEntity;
         public float targetTime = 3f;
         private int threshold = 0;
@@ -17,13 +16,12 @@ namespace Characters.Entity
         {
             _playerEntity = GetComponent<CharacterEntity>();
             Debug.Assert(_playerEntity != null);
-            
+
             _playerEntity.onHealthChanged.AddListener(OnPlayerHealthChanged);
         }
 
         private void Update()
         {
-            
         }
 
         private void OnPlayerHealthChanged()
@@ -40,7 +38,6 @@ namespace Characters.Entity
             {
                 PlayerDamage();
             }
-            
         }
 
         private void PlayerDamage()
@@ -56,10 +53,8 @@ namespace Characters.Entity
             }
             else
             {
-                _playerEntity.ChangeHealth(_playerEntity.GetHealth() - 1.0f);
+                _playerEntity.AddDeltaHealth(-1.0f);
             }
-
         }
-
     }
 }
