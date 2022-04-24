@@ -18,11 +18,11 @@ public class AIExample : MonoBehaviour
 
     public WanderType wanderType = WanderType.Random;
 
-    public float wanderSpeed = 4f;
-    public float chaseSpeed = 7f;
-    public float viewDistance = 10f;
+    public float wanderSpeed = 2f;
+    public float chaseSpeed = 3f;
+    public float viewDistance = 15f;
     public float wanderRadius = 7f;
-    public float loseThreshold = 10f;
+    public float loseThreshold = 2f;
     public Transform[] waypoints; //Array of waypoints is only used when waypoint wandering is selected
 
     private bool isAware = false;
@@ -66,15 +66,6 @@ public class AIExample : MonoBehaviour
         }
         else
         {
-            if (Time.realtimeSinceStartup < 10)
-            {
-                source.volume = 0.0f;
-            }
-            else
-            {
-                source.volume = 1.0f;
-                source.Play();
-            }
             playerHUDController.EnemyNotifyPlayer(gameObject);
             Wander();
             animator.SetBool("Aware", false);
@@ -84,9 +75,10 @@ public class AIExample : MonoBehaviour
         SearchForPlayer();
     }
 
+
     public void SearchForPlayer()
     {
-        if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)) < 120f)
+        if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(pc.transform.position)) < 180f)
         {
             if (Vector3.Distance(pc.transform.position, transform.position) < viewDistance)
             {
@@ -107,6 +99,7 @@ public class AIExample : MonoBehaviour
     {
         playerHUDController.EnemyNotifyPlayer(gameObject);
         isAware = true;
+        source.Play();
         isDetecting = false;
         loseTimer = 0;
     }
