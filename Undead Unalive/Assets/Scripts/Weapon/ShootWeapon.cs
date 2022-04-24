@@ -27,10 +27,12 @@ public class ShootWeapon : MonoBehaviour
     public GameObject muzzleFlash;
 
     public bool allowInvoke = true;
+    public AudioSource gunShot;
 
     private void Awake()
     {
         readyToShoot = true;
+        gunShot = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -60,6 +62,7 @@ public class ShootWeapon : MonoBehaviour
         if (readyToShoot && shootingVaccine && vaccinesLeft > 0)
         {
             Shoot("Vaccine");
+            gunShot.Play();
         }
 
         if (readyToShoot && shootingGrenade && grenadesLeft > 0)
