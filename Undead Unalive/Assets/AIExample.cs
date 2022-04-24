@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.FirstPerson;
 using UserInterface;
+using Managers;
 
 public class AIExample : MonoBehaviour
 {

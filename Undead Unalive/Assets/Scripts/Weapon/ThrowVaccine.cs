@@ -24,11 +24,13 @@ public class ThrowVaccine : MonoBehaviour
     public GameObject muzzleFlash;
 
     public bool allowInvoke = true;
+    public AudioSource fire;
 
     private void Awake()
     {
         
         readyToShoot = true;
+        fire = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -46,6 +48,8 @@ public class ThrowVaccine : MonoBehaviour
         if(readyToShoot && shooting && bulletsLeft > 0)
         {
             Shoot();
+            fire.Play();
+
         }
     }
 
