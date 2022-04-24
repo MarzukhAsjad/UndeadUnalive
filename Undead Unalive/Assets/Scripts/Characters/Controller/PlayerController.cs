@@ -188,13 +188,16 @@ public class PlayerController : MonoBehaviour
         _isMoving = unitMovement.magnitude > float.Epsilon;
         _isCameraAnimating = _isMoving && _isOnGround;
 
-        var verticalVelocity = _playerVelocity.y; // backup
-        _playerVelocity *= _isOnGround ? 0.1f : 0.999f; // friction
-        _playerVelocity += movementSpeed * unitMovement * _movementControlRatio; // player control
-
         var maxSpeed = maxMovementSpeed;
         if (_isOnGround && InputManager.Instance.InputSprint)
+        {
             maxSpeed *= sprintMultiplier;
+            unitMovement *= sprintMultiplier;
+        }
+        
+        var verticalVelocity = _playerVelocity.y; // backup
+        _playerVelocity *= _isOnGround ? 0.1f : 0.999f; // friction
+        _playerVelocity += unitMovement * (movementSpeed * _movementControlRatio); // player control
 
         // cap max speed
         _playerVelocity.y = 0;
