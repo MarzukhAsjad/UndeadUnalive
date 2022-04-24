@@ -52,6 +52,7 @@ public class BossController : MonoBehaviour
 
         if (health < 1)
         {
+            ScoreManager.Instance.AddDeltaScore(100);
             Death();
         }
     }
