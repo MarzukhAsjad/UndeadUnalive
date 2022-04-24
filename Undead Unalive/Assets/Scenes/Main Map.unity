@@ -24001,8 +24001,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraName: Main Camera
-  movementSpeed: 100
-  maxMovementSpeed: 100
+  movementSpeed: 4
+  maxMovementSpeed: 4
   sprintMultiplier: 4
   jumpHeight: 1.5
   gravity: 35
