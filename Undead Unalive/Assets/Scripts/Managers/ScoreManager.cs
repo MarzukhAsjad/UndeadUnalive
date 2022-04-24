@@ -14,7 +14,10 @@ namespace Managers
         private float _score;
         private List<GameObject> _mobList = new();
 
+        [SerializeField] private float scoreDefaultSize;
         [SerializeField] private TextMeshProUGUI scoreObject;
+
+        [SerializeField] private float multiplierDefaultSize;
         [SerializeField] private TextMeshProUGUI multiplierObject;
 
         private Coroutine _scoreAnimation;
@@ -59,12 +62,16 @@ namespace Managers
         private void ChangeScore(float to)
         {
             if (_scoreAnimation != null) StopCoroutine(_scoreAnimation);
+
+            scoreObject.fontSize = scoreDefaultSize;
             _scoreAnimation = StartCoroutine(TextAnimation(scoreObject, to, 0.2f));
         }
 
         private void ChangeMultiplier(float to)
         {
             if (_multiplierAnimation != null) StopCoroutine(_multiplierAnimation);
+
+            multiplierObject.fontSize = multiplierDefaultSize;
             _multiplierAnimation = StartCoroutine(TextAnimation(multiplierObject, to, 0.2f));
         }
 
@@ -80,7 +87,8 @@ namespace Managers
             while (timer < time)
             {
                 targetObject.fontSize = defaultSize + (maxSize - defaultSize) * Mathf.Sin(Mathf.PI * (timer / time));
-                targetObject.text = (defaultValue + deltaChange * (timer / time)).ToString(CultureInfo.InvariantCulture);
+                targetObject.text =
+                    (defaultValue + deltaChange * (timer / time)).ToString(CultureInfo.InvariantCulture);
 
                 yield return new WaitForFixedUpdate();
                 timer += Time.deltaTime;

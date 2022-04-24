@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using Characters.Entity;
 using Managers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -53,7 +53,6 @@ public class BossController : MonoBehaviour
 
         if (health < 1)
         {
-            ScoreManager.Instance.AddDeltaScore(100, "boss death");
             Death();
         }
     }
@@ -109,6 +108,9 @@ public class BossController : MonoBehaviour
         // instantiate blood spill
         Instantiate(bloodSpill, transform.position, transform.rotation);
         // destroy player game object
+        // instantiate blood spill\
+
+        player.GetComponent<CharacterEntity>().ChangeHealth(0);
     }
 
     public void Death()
@@ -127,6 +129,7 @@ public class BossController : MonoBehaviour
 
     IEnumerator DelayDeactivate()
     {
+        ScoreManager.Instance.AddDeltaScore(100, "boss death");
         yield return new WaitForSeconds(3.0f);
         this.gameObject.SetActive(false);
         bossHealth.SetActive(false);

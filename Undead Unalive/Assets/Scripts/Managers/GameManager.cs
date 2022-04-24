@@ -24,7 +24,7 @@ namespace Managers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (!_isGameOver && Input.GetKeyDown(KeyCode.Escape))
             {
                 pauseScreen.SetActive(true);
                 isPaused = true;
