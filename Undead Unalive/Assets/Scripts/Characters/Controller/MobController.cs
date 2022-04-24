@@ -94,7 +94,6 @@ namespace Characters.Controller
         public void Walk()
         {
             animator.SetBool("Walk", true);
-            animator.SetBool("Idle", false);
             animator.SetBool("SprintJump", false);
         }
 
@@ -102,7 +101,6 @@ namespace Characters.Controller
         public void Run()
         {
             animator.SetBool("Walk", false);
-            animator.SetBool("Idle", false);
             animator.SetBool("SprintJump", true);
         }
 
@@ -110,7 +108,6 @@ namespace Characters.Controller
         public void Idle()
         {
             animator.SetBool("Walk", false);
-            animator.SetBool("Idle", true);
             animator.SetBool("SprintJump", false);
 
         }
