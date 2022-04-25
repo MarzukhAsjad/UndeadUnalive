@@ -44,7 +44,7 @@ namespace Managers
         {
             if (reason.Length != 0)
             {
-                Debug.Log("Health: " + _score + " -> " + Mathf.Min(_score + delta, 99999) + " because " + reason + ".");
+                Debug.Log("Score: " + _score + " -> " + Mathf.Min(_score + delta, 99999) + " because " + reason + ".");
             }
 
             _score += delta;

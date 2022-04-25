@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
     public bool InputSprint { get; private set; }
 
     public bool KeyInteract { get; private set; }
+    public bool KeyDash { get; private set; }
     public Vector2 MousePosition { get; private set; }
     
     // Start is called before the first frame update
@@ -44,6 +45,7 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
         if (!_disabledKeyInput)
         {
             KeyInteract = Input.GetKeyDown(KeyCode.E);
+            KeyDash = Input.GetKeyDown(KeyCode.LeftControl);
             InputSprint = Input.GetKey(KeyCode.LeftShift);
         }
     }

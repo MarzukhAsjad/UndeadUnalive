@@ -7,9 +7,15 @@ namespace Characters.Entity
     {
         private const float DefaultMaxHealth = 100;
         private float _maxHealth = DefaultMaxHealth;
+        
+        private const float DefaultMaxStamina  = 100;
+        private float _maxStamina = DefaultMaxStamina;
 
         public UnityEvent onHealthChanged = new();
         private float _health = DefaultMaxHealth;
+        
+        public UnityEvent onStaminaChanged = new();
+        private float _stamina = DefaultMaxStamina;
 
         public void ChangeHealth(float newHealth)
         {
@@ -47,11 +53,42 @@ namespace Characters.Entity
         {
             return _maxHealth;
         }
-
-        private void Update()
+        
+        public void ChangeStamina(float newStamina)
         {
-            // AddDeltaMaxHealth(Time.deltaTime);
-            // AddDeltaHealth(Time.deltaTime / 2);
+            _stamina = newStamina;
+            onStaminaChanged?.Invoke();
+        }
+
+        public void AddDeltaStamina(float deltaStamina)
+        {
+            ChangeStamina(_stamina + deltaStamina);
+        }
+
+        public void ChangeMaxStamina(float newMaxStamina)
+        {
+            _maxStamina = newMaxStamina;
+            onStaminaChanged?.Invoke();
+        }
+
+        public void AddDeltaMaxStamina(float deltaMaxStamina)
+        {
+            ChangeMaxStamina(_maxStamina + deltaMaxStamina);
+        }
+
+        public float GetStamina()
+        {
+            return _stamina;
+        }
+
+        public float GetDefaultMaxStamina()
+        {
+            return DefaultMaxStamina;
+        }
+
+        public float GetMaxStamina()
+        {
+            return _maxStamina;
         }
     }
 }

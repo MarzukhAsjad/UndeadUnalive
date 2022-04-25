@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Globalization;
 using System.Linq;
 using Managers;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Interface.Controller
     {
         public float defaultMax;
         public float defaultValue;
+        public float animationTime = 2;
         public UnityEvent<float, float> changeEvent;
 
         private GameObject _bar;
@@ -21,10 +23,10 @@ namespace Interface.Controller
         private Slider _decreaseBarSlider;
         private RectTransform _decreaseBarRect;
         private float _trackingMax;
-        private float _tracking;
+        private float _trackingPercentage;
         private float _defaultBarWidth;
         private float _defaultBarPosX;
-        
+
         private Coroutine _decreaseAnimation;
 
 
@@ -33,21 +35,22 @@ namespace Interface.Controller
             _bar = gameObject;
 
             var wtf = GetComponentsInChildren<MonoBehaviour>();
-            
-            _decreaseBar = GetComponentsInChildren<MonoBehaviour>().FirstOrDefault(r => r.CompareTag("DecreaseBar"))!.gameObject;
-            
+
+            _decreaseBar = GetComponentsInChildren<MonoBehaviour>().FirstOrDefault(r => r.CompareTag("DecreaseBar"))!
+                .gameObject;
+
             _trackingMax = defaultMax;
-            _tracking = defaultValue;
-            
+            _trackingPercentage = defaultValue / defaultMax;
+
             _barSlider = _bar.GetComponent<Slider>();
             _barRect = _barSlider.GetComponent<RectTransform>();
             _decreaseBarSlider = _decreaseBar.GetComponent<Slider>();
             _decreaseBarRect = _decreaseBarSlider.GetComponent<RectTransform>();
             _defaultBarWidth = _barRect.sizeDelta.x;
             _defaultBarPosX = _barRect.anchoredPosition.x;
-            
+
             changeEvent.AddListener(OnChange);
-            OnChange(_tracking, _trackingMax);
+            OnChange(_trackingPercentage * defaultMax, _trackingMax);
         }
 
         private void OnChange(float newValue, float newMaxValue)
@@ -72,25 +75,29 @@ namespace Interface.Controller
                 _decreaseBarRect.sizeDelta = temSizeDelta;
             }
 
+            if (_decreaseBarSlider.value < _barSlider.value)
+            {
+                _trackingPercentage = _decreaseBarSlider.value = _barSlider.value;
+            }
+
             _barSlider.value = newValue / newMaxValue;
 
-            if (Math.Abs(_tracking - newValue) > float.Epsilon)
+            var valueDiff = _trackingPercentage - _barSlider.value;
+            if (Math.Abs(valueDiff) > float.Epsilon)
             {
-                print(_tracking - newValue);
-                _tracking = newValue;
-                if (_decreaseAnimation != null)
+                if (valueDiff > 0)
                 {
-                    StopCoroutine(_decreaseAnimation);
-                }
+                    _trackingPercentage = _barSlider.value;
+                    if (_decreaseAnimation != null)
+                    {
+                        StopCoroutine(_decreaseAnimation);
+                    }
 
-                _decreaseAnimation = StartCoroutine(DoDecreaseAnimation(2, 1));
-            }
-            else
-            {
-                _decreaseBarSlider.value = newValue / newMaxValue;
+                    _decreaseAnimation = StartCoroutine(DoDecreaseAnimation(animationTime, 1));
+                }
             }
         }
-        
+
         private IEnumerator DoDecreaseAnimation(float duration, float delay = 0)
         {
             yield return new WaitForSeconds(delay);
@@ -101,15 +108,28 @@ namespace Interface.Controller
             if (endValue > startValue) _decreaseBarSlider.value = endValue;
             else
             {
+                float timer = 0;
+
                 var delta = startValue - endValue;
-                var step = GameManager.Instance.TargetFPS * duration;
-                for (var i = 0; i <= step; ++i)
+                while (timer < duration)
                 {
-                    _decreaseBarSlider.value = startValue - (i / step) * delta;
+                    _decreaseBarSlider.value = startValue - (timer / duration) * delta;
+
+                    if (_barSlider.value > _decreaseBarSlider.value)
+                    {
+                        _trackingPercentage = _barSlider.value;
+                        _decreaseAnimation = null;
+                        yield break;
+                    }
+
                     yield return new WaitForEndOfFrame();
+                    timer += Time.deltaTime;
                 }
+
+                _decreaseBarSlider.value = endValue;
             }
 
+            _trackingPercentage = _barSlider.value;
             _decreaseAnimation = null;
         }
     }
