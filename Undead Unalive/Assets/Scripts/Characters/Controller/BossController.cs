@@ -90,7 +90,7 @@ public class BossController : MonoBehaviour
     //make the boss run
     public void Run() // set speed to 3.5
     {
-        agent.speed = 3.5f;
+        agent.speed = 4.0f;
         animator.SetBool("walk", false);
         animator.SetBool("run", true);
     }
