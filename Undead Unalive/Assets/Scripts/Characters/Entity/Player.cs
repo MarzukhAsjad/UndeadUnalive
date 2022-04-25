@@ -36,6 +36,7 @@ namespace Characters.Entity
         {
             if (other.CompareTag("ToxicGas"))
             {
+                Debug.Log("Lol");
                 PlayerDamage();
             }
         }
