@@ -49,7 +49,7 @@ public class AIExample : MonoBehaviour
         
         if (isAware)
         {
-            ps.Play();
+            
             animator.SetBool("Aware", true);
             agent.SetDestination(pc.transform.position);
             if (!isDetecting)
@@ -100,6 +100,7 @@ public class AIExample : MonoBehaviour
         playerHUDController.EnemyNotifyPlayer(gameObject);
         if (isAware == false)
         {
+            ps.Play();
             source.Play();
         }
         isAware = true;
