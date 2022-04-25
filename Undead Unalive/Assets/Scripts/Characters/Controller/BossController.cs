@@ -105,6 +105,7 @@ public class BossController : MonoBehaviour
         agent.speed = 0f;
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
+        animator.SetBool("eat", true);
         // instantiate blood spill
         Instantiate(bloodSpill, transform.position, transform.rotation);
         // destroy player game object
