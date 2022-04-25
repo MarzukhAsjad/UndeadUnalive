@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeathMenu : MonoBehaviour
-{
-    // Start is called before the first frame update
+{  
     void Start()
     {
-        
+        // should pause the game
+        Time.timeScale = 0.0f;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void MainMenu()
     {
-        
+        SceneManager.LoadScene(0);
+    } 
+
+    public void EndGame()
+    {
+#if UNITY_EDITOR
+    UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
     }
+
 }
