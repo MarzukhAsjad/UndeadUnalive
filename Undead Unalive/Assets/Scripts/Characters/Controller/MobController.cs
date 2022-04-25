@@ -122,6 +122,7 @@ namespace Characters.Controller
                 ScoreManager.Instance.AddDeltaScore(-5, "mob to zombie");
                 ScoreManager.Instance.KillMob();
                 Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
+                Destroy(gameObject);
             }
         }
     }
