@@ -15,11 +15,13 @@ namespace Managers
         [SerializeField] private GameObject pauseScreen;
 
         public bool isPaused = false;
+        public AudioSource death;
 
         private void Start()
         {
             mylight.intensity = 0.1f;
             Application.targetFrameRate = TargetFPS;
+            death = GetComponent<AudioSource>();
         }
 
         private void Update()
@@ -35,6 +37,7 @@ namespace Managers
         {
             if (!_isGameOver)
             {
+                death.Play();
                 InputManager.Instance.DisableAllUserInput();
                 PlayerHUDController.Instance.DoGameOverScreen();
             }

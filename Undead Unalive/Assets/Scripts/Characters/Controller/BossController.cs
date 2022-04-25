@@ -19,6 +19,7 @@ public class BossController : MonoBehaviour
     private float distance; // distance between boss and player
     private Animator animator; // boss's animator
     private Slider slider;
+    public AudioSource eat;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,7 @@ public class BossController : MonoBehaviour
         slider = bossHealth.GetComponent<Slider>();
         detectRadius = 20;
         health = 10;
+        eat = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -72,6 +74,7 @@ public class BossController : MonoBehaviour
             agent.SetDestination(this.transform.position);
             Debug.Log("Player hit");
             Kill();
+            eat.Play();
         }
         
     }
@@ -89,7 +92,7 @@ public class BossController : MonoBehaviour
     {
         agent.speed = 3.5f;
         animator.SetBool("walk", false);
-        animator.SetBool("run", true); 
+        animator.SetBool("run", true);
     }
 
     //make the boss do nothing, stand idle and EAT
