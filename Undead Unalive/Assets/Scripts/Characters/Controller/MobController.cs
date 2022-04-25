@@ -74,7 +74,7 @@ namespace Characters.Controller
                 agent.SetDestination(desiredPosition);
                 if (distance > detectRadius)
                 {// if the mob is > detectRadius away from player, they'll run
-                    agent.speed = 3.5f;
+                    agent.speed = 4;
                     Run();
                 }
                 else if (distance > shieldRadius) //otherwise they'll walk
