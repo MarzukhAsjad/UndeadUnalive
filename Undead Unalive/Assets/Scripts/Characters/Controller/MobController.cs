@@ -33,7 +33,7 @@ namespace Characters.Controller
             detectRadius = 10;
             offset = new Vector3(0, 0, 5);
             
-            ScoreManager.Instance.RegisterNewMob(gameObject);
+            ScoreManager.Instance.RegisterNewMob();
         }
 
         public void Update()
@@ -117,12 +117,11 @@ namespace Characters.Controller
 
         private void OnParticleCollision(GameObject other)
         {
-            Debug.Log(other.tag);
             if (creationTime <= 0.0f && other.CompareTag("ToxicGas"))
             {
                 ScoreManager.Instance.AddDeltaScore(-5, "mob to zombie");
+                ScoreManager.Instance.KillMob();
                 Instantiate(GameObject.FindGameObjectWithTag("Zombie"), transform.position, transform.rotation);
-                Destroy(gameObject);
             }
         }
     }
