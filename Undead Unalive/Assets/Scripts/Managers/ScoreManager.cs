@@ -88,7 +88,7 @@ namespace Managers
             {
                 targetObject.fontSize = defaultSize + (maxSize - defaultSize) * Mathf.Sin(Mathf.PI * (timer / time));
                 targetObject.text =
-                    (defaultValue + deltaChange * (timer / time)).ToString(CultureInfo.InvariantCulture);
+                    ((int)(defaultValue + deltaChange * (timer / time))).ToString(CultureInfo.InvariantCulture);
 
                 yield return new WaitForFixedUpdate();
                 timer += Time.deltaTime;
