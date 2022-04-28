@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityStandardAssets.Characters.FirstPerson;
 using UserInterface;
 using Managers;
 
@@ -29,7 +28,6 @@ public class AIExample : MonoBehaviour
     private bool isDetecting = false;
     private Vector3 wanderPoint;
     private NavMeshAgent agent;
-    private Renderer renderer;
     private int waypointIndex = 0;
     private Animator animator;
     private float loseTimer = 0;
@@ -38,7 +36,6 @@ public class AIExample : MonoBehaviour
     public void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        renderer = GetComponent<Renderer>();
         animator = GetComponentInChildren<Animator>();
         wanderPoint = RandomWanderPoint();
         ps = gameObject.GetComponentInChildren<ParticleSystem>();
