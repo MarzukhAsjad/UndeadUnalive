@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
-
     public NavMeshAgent agent; // navmesh 
     public int detectRadius; // zone for fast running
     public int health; // boss health
@@ -20,6 +19,7 @@ public class BossController : MonoBehaviour
     private Animator animator; // boss's animator
     private Slider slider;
     public AudioSource eat;
+    private bool _isBossDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -40,14 +40,12 @@ public class BossController : MonoBehaviour
     {
         distance = Vector3.Distance(player.transform.position, this.transform.position);
 
-        if (distance > detectRadius) 
+        if (distance > detectRadius)
         {
-
             agent.SetDestination(player.transform.position);
             Walk();
-
         }
-        else 
+        else
         {
             agent.SetDestination(player.transform.position);
             Run();
@@ -55,20 +53,21 @@ public class BossController : MonoBehaviour
 
         if (health < 1)
         {
-            Death();
+            if (!_isBossDead)
+                Death();
+            _isBossDead = true;
         }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
-
         if (collider.tag == "Vaccine") // to detect vaccine
         {
             Destroy(collider.gameObject);
             health -= 1;
             changeHealth();
-
         }
+
         if (collider.tag == "Player") // to detect player
         {
             agent.SetDestination(this.transform.position);
@@ -76,7 +75,6 @@ public class BossController : MonoBehaviour
             Kill();
             eat.Play();
         }
-        
     }
 
     //make the boss walk
@@ -84,13 +82,13 @@ public class BossController : MonoBehaviour
     {
         agent.speed = 2.0f;
         animator.SetBool("walk", true);
-        animator.SetBool("run", false); 
+        animator.SetBool("run", false);
     }
 
     //make the boss run
     public void Run() // set speed to 3.5
     {
-        agent.speed = 3.5f;
+        agent.speed = 4.0f;
         animator.SetBool("walk", false);
         animator.SetBool("run", true);
     }
@@ -100,7 +98,7 @@ public class BossController : MonoBehaviour
     {
         agent.speed = 0f;
         animator.SetBool("walk", false);
-        animator.SetBool("run", false); 
+        animator.SetBool("run", false);
     }
 
     public void Kill()
@@ -108,6 +106,7 @@ public class BossController : MonoBehaviour
         agent.speed = 0f;
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
+        animator.SetBool("eat", true);
         // instantiate blood spill
         Instantiate(bloodSpill, transform.position, transform.rotation);
         // destroy player game object
@@ -125,6 +124,7 @@ public class BossController : MonoBehaviour
         animator.SetBool("eat", false);
         StartCoroutine(DelayDeactivate());
     }
+
     public void changeHealth()
     {
         slider.value = .1f * (float)health;

@@ -22,10 +22,12 @@ namespace UserInterface
         private Camera activeCamera;
         private GameObject _playerHUDObject;
         private GameObject _healthBar;
+        private GameObject _staminaBar;
 
         private CharacterEntity _playerEntity;
 
         private readonly UnityEvent<float, float> _healthChangeProxy = new();
+        private readonly UnityEvent<float, float> _staminaChangeProxy = new();
 
         public GameObject enemyIndicatorPrefab;
 
@@ -45,12 +47,20 @@ namespace UserInterface
             Debug.Assert(_playerEntity != null);
 
             _healthBar = _playerHUDObject.transform.Find("HealthBar").gameObject;
+            _staminaBar = _playerHUDObject.transform.Find("StaminaBar").gameObject;
 
             _playerEntity.onHealthChanged.AddListener(() => _healthChangeProxy.Invoke(_playerEntity.GetHealth(), _playerEntity.GetDefaultMaxHealth()));
             var barController = _healthBar.AddComponent<BarController>();
             barController.changeEvent = _healthChangeProxy;
             barController.defaultValue = _playerEntity.GetHealth();
             barController.defaultMax = _playerEntity.GetDefaultMaxHealth();
+            
+            _playerEntity.onStaminaChanged.AddListener(() => _staminaChangeProxy.Invoke(_playerEntity.GetStamina(), _playerEntity.GetDefaultMaxStamina()));
+            barController = _staminaBar.AddComponent<BarController>();
+            barController.animationTime = 1;
+            barController.changeEvent = _staminaChangeProxy;
+            barController.defaultValue = _playerEntity.GetStamina();
+            barController.defaultMax = _playerEntity.GetDefaultMaxStamina();
         }
 
         private void Start()

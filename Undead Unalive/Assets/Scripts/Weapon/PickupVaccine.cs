@@ -14,7 +14,7 @@ public class PickupVaccine : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             ScoreManager.Instance.AddDeltaScore(20, "pickup");
-            ScoringSystem.vaccineCount += 1;
+            ScoringSystem.vaccineCount += 3;
             gameObject.SetActive(false);
         }
     }

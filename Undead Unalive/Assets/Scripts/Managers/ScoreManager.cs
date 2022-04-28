@@ -12,7 +12,8 @@ namespace Managers
     {
         public float initialScore = 100;
         private float _score;
-        private List<GameObject> _mobList = new();
+        private int numSurvivors = 1;
+        private int initialSurvivors = 1;
 
         [SerializeField] private float scoreDefaultSize;
         [SerializeField] private TextMeshProUGUI scoreObject;
@@ -31,11 +32,11 @@ namespace Managers
 
         private void Update()
         {
-            var newList = _mobList.TakeWhile(m => m != null).ToList();
-            if (newList.Count != _mobList.Count)
+            
+            if (initialSurvivors != numSurvivors)
             {
-                _mobList = newList;
-                ChangeMultiplier(_mobList.Count + 1);
+                initialSurvivors = numSurvivors;
+                ChangeMultiplier(numSurvivors);
             }
         }
 
@@ -43,7 +44,7 @@ namespace Managers
         {
             if (reason.Length != 0)
             {
-                Debug.Log("Health: " + _score + " -> " + Mathf.Min(_score + delta, 99999) + " because " + reason + ".");
+                Debug.Log("Score: " + _score + " -> " + Mathf.Min(_score + delta, 99999) + " because " + reason + ".");
             }
 
             _score += delta;
@@ -52,11 +53,14 @@ namespace Managers
             ChangeScore(_score);
         }
 
-        public void RegisterNewMob(GameObject mobObject)
+        public void RegisterNewMob()
         {
-            ChangeMultiplier(_mobList.Count + 1);
+            numSurvivors += 1;
+        }
 
-            _mobList.Add(mobObject);
+        public void KillMob()
+        {
+            numSurvivors -= 1;
         }
 
         private void ChangeScore(float to)
@@ -88,7 +92,7 @@ namespace Managers
             {
                 targetObject.fontSize = defaultSize + (maxSize - defaultSize) * Mathf.Sin(Mathf.PI * (timer / time));
                 targetObject.text =
-                    (defaultValue + deltaChange * (timer / time)).ToString(CultureInfo.InvariantCulture);
+                    ((int)(defaultValue + deltaChange * (timer / time))).ToString(CultureInfo.InvariantCulture);
 
                 yield return new WaitForFixedUpdate();
                 timer += Time.deltaTime;

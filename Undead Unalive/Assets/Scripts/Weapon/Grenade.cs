@@ -49,13 +49,13 @@ public class Grenade : MonoBehaviour
         {
             if (nearbyObject.tag == "Zombie")
             {
-                ScoreManager.Instance.AddDeltaScore(10, "grenade damage");
+                ScoreManager.Instance.AddDeltaScore(-10, "grenade damage");
                 Destroy(nearbyObject.gameObject);
             }
 
             if (nearbyObject.tag == "Boss")
             {
-                ScoreManager.Instance.AddDeltaScore(10, "grenade damage");
+                ScoreManager.Instance.AddDeltaScore(-10, "grenade damage");
                 nearbyObject.gameObject.GetComponent<BossController>().health -= 2;
                 nearbyObject.gameObject.GetComponent<BossController>().changeHealth();
             }

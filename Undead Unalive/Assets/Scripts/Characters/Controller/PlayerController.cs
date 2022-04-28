@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public bool forceCameraOnPlayer = false;
     public float cameraSwayDistance = 0.03f;
     public float cameraBobPeriod = 0.4f;
+    public float dashMultiplier = 100;
 
     /*
      *
@@ -44,9 +45,13 @@ public class PlayerController : MonoBehaviour
     private float _cameraAnimationTimer;
 
     private Vector3 _playerDefaultHandPosition;
-    
+
     private PlayerInteractable _playerInteractableRaycastResult;
     private Vector3 _playerInteractableRaycastResultPosition;
+
+    private bool _sprintPenalty;
+
+    private CharacterEntity _characterEntity;
     // private GameObject _raycastObject;
 
     // Start is called before the first frame update
@@ -65,6 +70,7 @@ public class PlayerController : MonoBehaviour
             _mainCamera.transform.localPosition = new Vector3(0, _cameraDefaultHeight, 0);
         }
 
+        _characterEntity = GetComponent<CharacterEntity>();
         _playerDefaultHandPosition = _mainCamera.transform.GetChild(0).localPosition;
     }
 
@@ -75,9 +81,11 @@ public class PlayerController : MonoBehaviour
         UpdateCameraView();
         UpdateRaycast();
         KeyInputHandler();
+
+        RechargeStamina();
     }
 
-    #if DEBUG_GROUND
+#if DEBUG_GROUND
     private void OnDrawGizmos()
     {
         if(_characterController == null) return;
@@ -85,13 +93,15 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(_characterController.transform.position - new Vector3(0, _playerHeight / 2, 0), 0.3f);
     }
-    #endif
+#endif
 
     private void FixedUpdate()
     {
         _playerVelocity.y -= (gravity * Time.deltaTime);
         var isLastFrameOnGround = _isOnGround;
-        _isOnGround = Physics.CheckBox(_characterController.transform.position - new Vector3(0, _playerHeight / 2 + 0.2f, 0), new Vector3(_playerRadius, 0.2f, _playerRadius), Quaternion.identity, groundMask);
+        _isOnGround =
+            Physics.CheckBox(_characterController.transform.position - new Vector3(0, _playerHeight / 2 + 0.2f, 0),
+                new Vector3(_playerRadius, 0.2f, _playerRadius), Quaternion.identity, groundMask);
 
         // fall damage
         if (!isLastFrameOnGround && _isOnGround)
@@ -100,13 +110,14 @@ public class PlayerController : MonoBehaviour
 
             if (diff < 0)
             {
-                GetComponent<CharacterEntity>().AddDeltaHealth(diff);
+                _characterEntity.AddDeltaHealth(diff);
             }
         }
 
-        #if DEBUG_GROUND
-        var collisions = Physics.OverlapSphere(_characterController.transform.position - new Vector3(0, _playerHeight / 2, 0), 1, groundMask);
-        #endif
+#if DEBUG_GROUND
+        var collisions =
+ Physics.OverlapSphere(_characterController.transform.position - new Vector3(0, _playerHeight / 2, 0), 1, groundMask);
+#endif
 
         _movementControlRatio = _isOnGround ? 1f : 0.0015f;
 
@@ -115,12 +126,24 @@ public class PlayerController : MonoBehaviour
             // "reset" gravity
             _playerVelocity.y = -2;
 
-            #if DEBUG_GROUND
+#if DEBUG_GROUND
             foreach (var collision in collisions)
             {
                 print(collision.gameObject.name);
             }
-            #endif
+#endif
+        }
+    }
+
+    private void RechargeStamina()
+    {
+        var staminaRecharge = Time.deltaTime * 10;
+        var maxStamina = _characterEntity.GetDefaultMaxStamina();
+        var currentStamina = _characterEntity.GetStamina();
+        var newStamina = staminaRecharge + _characterEntity.GetStamina();
+        if (currentStamina < maxStamina)
+        {
+            _characterEntity.ChangeStamina(Mathf.Min(newStamina, maxStamina));
         }
     }
 
@@ -160,12 +183,12 @@ public class PlayerController : MonoBehaviour
             temPos.x = sin2WalkTime * cameraSwayDistance * 2;
             temPos.y = _cameraDefaultHeight + sinWalkTime * cameraSwayDistance;
             mainCameraTransform.localPosition = temPos;
-            
+
             // hand movement
             temPos.x = (1 - sin2WalkTime) * cameraSwayDistance * 2;
             temPos.y = _cameraDefaultHeight + (1 - sinWalkTime) * cameraSwayDistance;
             temPos.z = 0;
-            
+
             temPos.Scale(mainCameraTransform.GetChild(0).localScale);
             mainCameraTransform.GetChild(0).localPosition = _playerDefaultHandPosition + temPos;
         }
@@ -191,19 +214,41 @@ public class PlayerController : MonoBehaviour
         var maxSpeed = maxMovementSpeed;
         if (_isOnGround && InputManager.Instance.InputSprint)
         {
-            maxSpeed *= sprintMultiplier;
-            unitMovement *= sprintMultiplier;
+            if (_characterEntity.GetStamina() < Time.deltaTime * 15)
+            {
+                _sprintPenalty = true;
+            }
+            
+            if (_sprintPenalty)
+            {
+                if (_characterEntity.GetStamina() > 50)
+                    _sprintPenalty = false;
+            }
+            else
+            {
+                _characterEntity.AddDeltaStamina(-Time.deltaTime * 15);
+                maxSpeed *= sprintMultiplier;
+                unitMovement *= sprintMultiplier;
+            }
         }
-        
+
+        if (_isOnGround && InputManager.Instance.KeyDash && _characterEntity.GetStamina() >= 30)
+        {
+            _characterEntity.AddDeltaStamina(-30);
+            _playerVelocity = _playerVelocity.normalized * dashMultiplier;
+        }
+
         var verticalVelocity = _playerVelocity.y; // backup
-        _playerVelocity *= _isOnGround ? 0.1f : 0.999f; // friction
-        _playerVelocity += unitMovement * (movementSpeed * _movementControlRatio); // player control
+        _playerVelocity *= _isOnGround ? 0.9f : 0.999f; // friction
 
         // cap max speed
         _playerVelocity.y = 0;
-        if (_playerVelocity.magnitude > maxSpeed)
-            _playerVelocity = _playerVelocity.normalized * maxSpeed;
-        
+        // if (_playerVelocity.magnitude > maxSpeed)
+        //     _playerVelocity = _playerVelocity.normalized * maxSpeed;
+
+        if (_playerVelocity.magnitude < maxSpeed)
+            _playerVelocity += unitMovement * (movementSpeed * _movementControlRatio); // player control
+
         _playerVelocity.y = verticalVelocity; // restore
 
         /*
@@ -231,7 +276,7 @@ public class PlayerController : MonoBehaviour
         var size = Physics.RaycastNonAlloc(ray, hits);
 
         _playerInteractableRaycastResult = null;
-        
+
         float minDistance = float.MaxValue;
         for (var i = 0; i < size; ++i)
         {
