@@ -3,6 +3,7 @@
 using Characters.Entity;
 using Interface.Player;
 using UnityEngine;
+using Utilities;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public float cameraSwayDistance = 0.03f;
     public float cameraBobPeriod = 0.4f;
     public float dashMultiplier = 100;
+    public AudioClip jumpAudio;
+    public AudioClip landAudio;
 
     /*
      *
@@ -51,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
     private bool _sprintPenalty;
 
+    private AudioRandomizer _walkAudio;
+
     private CharacterEntity _characterEntity;
     // private GameObject _raycastObject;
 
@@ -72,6 +77,8 @@ public class PlayerController : MonoBehaviour
 
         _characterEntity = GetComponent<CharacterEntity>();
         _playerDefaultHandPosition = _mainCamera.transform.GetChild(0).localPosition;
+
+        _walkAudio = GetComponent<AudioRandomizer>();
     }
 
     // Update is called once per frame
@@ -106,6 +113,7 @@ public class PlayerController : MonoBehaviour
         // fall damage
         if (!isLastFrameOnGround && _isOnGround)
         {
+            GetComponent<AudioSource>().PlayOneShot(landAudio);
             var diff = _playerVelocity.y + gravity / 2;
 
             if (diff < 0)
@@ -218,7 +226,7 @@ public class PlayerController : MonoBehaviour
             {
                 _sprintPenalty = true;
             }
-            
+
             if (_sprintPenalty)
             {
                 if (_characterEntity.GetStamina() > 50)
@@ -237,7 +245,9 @@ public class PlayerController : MonoBehaviour
             _characterEntity.AddDeltaStamina(-30);
             _playerVelocity = _playerVelocity.normalized * dashMultiplier;
         }
-
+        
+        _walkAudio.isPlaying = _isOnGround && Mathf.Abs(unitMovement.magnitude) > float.Epsilon;
+        
         var verticalVelocity = _playerVelocity.y; // backup
         _playerVelocity *= _isOnGround ? 0.9f : 0.999f; // friction
 
@@ -259,6 +269,7 @@ public class PlayerController : MonoBehaviour
         if (_isOnGround && InputManager.Instance.InputJump)
         {
             _playerVelocity.y = Mathf.Sqrt(jumpHeight * gravity * 2);
+            GetComponent<AudioSource>().PlayOneShot(jumpAudio);
         }
 
         /*
