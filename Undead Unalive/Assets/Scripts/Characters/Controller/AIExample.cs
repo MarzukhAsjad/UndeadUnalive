@@ -63,7 +63,6 @@ public class AIExample : MonoBehaviour
         }
         else
         {
-            playerHUDController.EnemyNotifyPlayer(gameObject);
             Wander();
             animator.SetBool("Aware", false);
             agent.speed = wanderSpeed;
