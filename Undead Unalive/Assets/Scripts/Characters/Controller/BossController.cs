@@ -20,11 +20,12 @@ public class BossController : MonoBehaviour
     private Slider slider;
     public AudioSource eat;
     private bool _isBossDead = false;
+    private bool isBossNear = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        bossHealth.SetActive(true);
+        bossHealth.SetActive(isBossNear);
         agent = this.GetComponent<NavMeshAgent>();
         rb = this.GetComponent<Rigidbody>();
         animator = this.GetComponent<Animator>();
@@ -56,6 +57,17 @@ public class BossController : MonoBehaviour
             if (!_isBossDead)
                 Death();
             _isBossDead = true;
+        }
+
+        if (distance < 100)
+        {
+            isBossNear = true;
+            bossHealth.SetActive(isBossNear);
+        }
+        else
+        {
+            isBossNear = false;
+            bossHealth.SetActive(isBossNear);
         }
     }
 
